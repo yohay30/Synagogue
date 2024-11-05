@@ -1,0 +1,32 @@
+/* עיצוב עבור הניווט */
+.navbar {
+    display: flex;
+    justify-content: flex-start; /* מתחיל את הקישורים מימין */
+    align-items: center;
+    background-color: #333; /* צבע רקע כהה */
+    padding: 10px 20px;
+    font-family: Arial, sans-serif;
+    position: fixed;
+    top: 0;
+    right: 0; /* מוודא שהסרגל מתחיל מימין */
+    width: 100%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1000; /* כדי שיהיה תמיד למעלה */
+}
+
+.navbar a {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0 15px; /* ריווח בין הקישורים */
+    transition: color 0.3s ease;
+}
+
+.navbar a:hover {
+    color: #ffdd57; /* צבע במעבר עכבר */
+}
+
+.navbar a:last-child {
+    color: #ff6b6b; /* צבע מיוחד להתנתקות */
+}

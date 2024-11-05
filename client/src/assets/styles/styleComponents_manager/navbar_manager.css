@@ -1,0 +1,37 @@
+/* עיצוב עבור הניווט */
+.navbar_manager {
+    max-width: 1200px;
+    margin: 0 auto; /* מרכז את הניווט */
+    display: flex;
+    justify-content: center; /* מרכז את התוכן אופקית */
+    align-items: center;
+    
+    background-color: #333; /* צבע רקע כהה */
+    padding: 10px 20px;
+    font-family: Arial, sans-serif;
+    position: fixed;
+    top: 0;
+    left: 50%; /* מיקום מרכזי */
+    transform: translateX(-50%); /* מרכז את הקונטיינר */
+  
+    width: 100%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid #00080b;
+}
+
+.navbar_manager a {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0 15px; /* ריווח בין הקישורים */
+    transition: color 0.3s ease;
+}
+
+.navbar_manager a:hover {
+    color: #ffdd57; /* צבע במעבר עכבר */
+}
+
+.navbar_manager a:last-child {
+    color: #ff6b6b; /* צבע מיוחד להתנתקות */
+}
