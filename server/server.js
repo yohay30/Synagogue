@@ -32,7 +32,7 @@ connection.connect((err) => {
 
 // יצירת API לקבלת רשימת חברים
 app.get('/friends_manager', (req, res) => {
-    connection.query('SELECT * FROM community_members', (err, results) => {
+    connection.query('SELECT * FROM synagogue.community_members;', (err, results) => {
         if (err) {
             return res.status(500).json({ error: 'Error fetching members' });
         }

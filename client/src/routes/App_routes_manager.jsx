@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import HomeManager from "../pages_manger/homeManager";
 import AboutManager from "../pages_manger/aboutManager";
@@ -14,22 +14,25 @@ import MainBoard from "../pageMainBoard/mainBoard";
 import ChairsManager from "../pages_manger/chairsManager";
 import HalachaManager from "../pages_manger/halachaManager";
 
+
 function App_Routes() {
   return (
+    <BrowserRouter>
     <Routes>
       <Route path="/home-manager" element={<HomeManager />} />
       <Route path="/main-board" element={<MainBoard />} />
       <Route path="/prayers-manager" element={<PrayersManager />} />
-      <Route path="/Lessons_manager" element={<LessonsManager />} />
-      <Route path="/about_manager" element={<AboutManager />} />
-      <Route path="/contact_manager" element={<ContactManager />} />
-      <Route path="/events_manager" element={<EventsManager />} />
+      <Route path="/Lessons-manager" element={<LessonsManager />} />
+      <Route path="/about-manager" element={<AboutManager />} />
+      <Route path="/contact-manager" element={<ContactManager />} />
+      <Route path="/events-manager" element={<EventsManager />} />
       <Route path="/friends-manager" element={<FriendsManager />} />
-      <Route path="/massages_manager" element={<MassagesManager />} />
-      <Route path="/memorials_manager" element={<MemorialsManager />} />
-      <Route path="/chairs_manager" element={<ChairsManager />} />
-      <Route path="/halacha_manager" element={<HalachaManager />} />
+      <Route path="/massages-manager" element={<MassagesManager />} />
+      <Route path="/memorials-manager" element={<MemorialsManager />} />
+      <Route path="/chairs-manager" element={<ChairsManager />} />
+      <Route path="/halacha-manager" element={<HalachaManager />} />
     </Routes>
+  </BrowserRouter>
   );
 }
 export default App_Routes;
