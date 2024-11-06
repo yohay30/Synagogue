@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
 const ShabbatTimes = () => {
   const [times, setTimes] = useState(null);
@@ -7,17 +7,18 @@ const ShabbatTimes = () => {
   useEffect(() => {
     const fetchShabbatTimes = async () => {
       try {
-        const response = await fetch('https://www.hebcal.com/shabbat?cfg=json&geonameid=281184&ue=off&M=on&lg=s&tgt=_top');
+        const response = await fetch(
+          "https://www.hebcal.com/shabbat?cfg=json&geonameid=281184&ue=off&M=on&lg=s&tgt=_top"
+        );
 
-        // בדוק אם התגובה הצליחה
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        const data = await response.json(); // קרא את התגובה כ-json
-        setTimes(data); // עדכן את המצב עם הנתונים שהתקבלו
+        const data = await response.json();
+        setTimes(data);
       } catch (error) {
-        setError(error.message); // שמור את השגיאה במצב
+        setError(error.message);
       }
     };
 
@@ -25,18 +26,30 @@ const ShabbatTimes = () => {
   }, []);
 
   if (error) {
-    return <div>Error: {error}</div>; // הצג שגיאה אם יש
+    return <div>Error: {error}</div>;
   }
 
   if (!times) {
-    return <div>Loading...</div>; // הצג הודעה בזמן הטעינה
+    return <div>Loading...</div>;
   }
 
+  // מציאת זמני כניסת שבת, פרשה והבדלה
+  const candleLighting = times.items.find(item => item.category === "candles");
+  const havdalah = times.items.find(item => item.category === "havdalah");
+  const parashat = times.items.find(item => item.category === "parashat");
+
   return (
-    <div>
-      <h1>Shabbat Times</h1>
-      {/* הצג את זמני השבת, תלוי במבנה הנתונים שהתקבל */}
-      <pre>{JSON.stringify(times, null, 2)}</pre>
+    <div style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif', textAlign: "center" }}>
+      <h1>{times.title}</h1>
+      {candleLighting && (
+        <p>כניסת שבת: {new Date(candleLighting.date).toLocaleTimeString("he-IL", { hour: "2-digit", minute: "2-digit" })}</p>
+      )}
+      {havdalah && (
+        <p>הבדלה: {new Date(havdalah.date).toLocaleTimeString("he-IL", { hour: "2-digit", minute: "2-digit" })}</p>
+      )}
+      {parashat && (
+        <p>פרשת השבוע: {parashat.hebrew}</p>
+      )}
     </div>
   );
 };
