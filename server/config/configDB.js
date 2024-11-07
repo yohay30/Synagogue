@@ -1,10 +1,12 @@
-const mysql = require('mysql2');
+import dotenv from "dotenv";
+import mysql from "mysql2";
+dotenv.config();
 
 const connection = mysql.createConnection({
-    host: 'localhost', // כתובת השרת (לרוב 'localhost' אם אתה מריץ את זה במחשב המקומי)
-    port: 3306,
-    user: 'root', // שם המשתמש שלך ב-MySQL
-    password: '123456', // הסיסמה שלך
-    database: 'synagogue' // שם מסד הנתונים שלך
-    });
-    module.exports = connection;
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+});
+export default connection ;
