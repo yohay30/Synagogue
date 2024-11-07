@@ -11,7 +11,7 @@ const FriendsManager = () => {
       try {
         const response = await fetch("http://localhost:5000/friends-manager");
         if (!response.ok) {
-          throw new Error("Network response was not ok");
+          throw new Error("Network response was not ok in fetchData file friendsManager");
         }
         const data = await response.json();
         setMembers(data);
