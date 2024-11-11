@@ -3,7 +3,8 @@
   max-width: 1000px;
   margin: auto;
   padding: 20px;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
   color: #333;
 }
 
@@ -13,7 +14,6 @@
   text-align: center;
   margin-bottom: 30px;
   font-weight: 600;
-  
 }
 
 /* טבלה */
@@ -67,12 +67,12 @@ tbody tr:last-child td {
 input[type="checkbox"] {
   transform: scale(1.1);
   cursor: pointer;
-  accent-color: #0071e3; /* צבע כחול אפל קלאסי */
+  accent-color: #0071e3;
 }
 
 /* כותרת וכפתורים */
 .title {
-  justify-self:center;
+  justify-self: center;
   background-color: #ffffff;
   display: flex;
   align-items: center;
@@ -122,6 +122,7 @@ button:focus {
 button:active {
   background-color: #004494;
 }
+
 .search-button {
   background-color: #f5f5f7;
   color: #007aff;
@@ -154,4 +155,185 @@ button:active {
 
 .search-icon {
   font-size: 1.2rem;
+}
+
+/* עיצוב ה-Modal */
+.edit-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 30px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1), 0 5px 15px rgba(0, 0, 0, 0.05);
+  z-index: 1000;
+  border-radius: 16px;
+  width: 80%;
+  max-width: 400px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.edit-modal h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #333;
+  font-weight: 600;
+}
+
+.edit-modal label {
+  font-size: 1rem;
+  color: #555;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.edit-modal input[type="text"],
+.edit-modal input[type="password"],
+.edit-modal input[type="email"],
+.edit-modal input[type="checkbox"] {
+  width: 70%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  font-size: 1rem;
+  background-color: rgba(240, 240, 240, 0.6);
+  outline: none;
+  transition: border 0.2s ease-in-out;
+}
+
+.edit-modal input[type="text"]:focus,
+.edit-modal input[type="password"]:focus,
+.edit-modal input[type="email"]:focus {
+  border: 1px solid #007aff;
+}
+
+.edit-modal button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  color: #fff;
+  background-color: #007aff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.edit-modal button:hover {
+  background-color: #005bb5;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  z-index: 999;
+}
+
+/* תיקון עיצוב השדות והכפתורים */
+.form-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+.form-group label {
+  flex: 0 0 30%;
+  font-size: 1rem;
+  color: #333;
+}
+
+.form-group input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: rgba(240, 240, 240, 0.6);
+  outline: none;
+  transition: border 0.2s ease-in-out;
+}
+
+.form-group button {
+  flex: 0 0 auto;
+  padding: 10px 20px;
+  background-color: #007aff;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.form-group button:hover {
+  background-color: #005bb5;
+}
+
+/* הוספת חבר */
+.add-friend-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 30px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1), 0 5px 15px rgba(0, 0, 0, 0.05);
+  z-index: 1000;
+  border-radius: 16px;
+  width: 80%;
+  max-width: 400px;
+}
+
+.add-friend-modal h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #333;
+  font-weight: 600;
+}
+
+.add-friend-modal label {
+  font-size: 1rem;
+  color: #555;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.add-friend-modal input[type="text"] {
+  width: 70%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  font-size: 1rem;
+  background-color: rgba(240, 240, 240, 0.6);
+  outline: none;
+  transition: border 0.2s ease-in-out;
+}
+
+.add-friend-modal input[type="text"]:focus {
+  border: 1px solid #007aff;
+}
+
+.add-friend-modal button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  color: #fff;
+  background-color: #28a745;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.add-friend-modal button:hover {
+  background-color: #218838;
 }
