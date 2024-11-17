@@ -33,6 +33,8 @@ const FriendsManager = () => {
     };
     fetchData();
   }, []);
+  console.log(members);
+  
 
   const handleSaveChanges = async () => {
     try {

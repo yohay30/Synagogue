@@ -16,6 +16,7 @@ const ShabbatTimes = () => {
         }
 
         const data = await response.json();
+        console.log(data);
         setTimes(data);
       } catch (error) {
         setError(error.message);
@@ -34,22 +35,40 @@ const ShabbatTimes = () => {
   }
 
   // מציאת זמני כניסת שבת, פרשה והבדלה
-  const candleLighting = times.items.find(item => item.category === "candles");
-  const havdalah = times.items.find(item => item.category === "havdalah");
-  const parashat = times.items.find(item => item.category === "parashat");
+  const candleLighting = times.items.find(
+    (item) => item.category === "candles"
+  );
+  const havdalah = times.items.find((item) => item.category === "havdalah");
+  const parashat = times.items.find((item) => item.category === "parashat");
 
   return (
-    <div style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif', textAlign: "center" }}>
+    <div
+      style={{
+        fontFamily:
+          '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+        textAlign: "center",
+      }}
+    >
       <h1>{times.title}</h1>
       {candleLighting && (
-        <p>כניסת שבת: {new Date(candleLighting.date).toLocaleTimeString("he-IL", { hour: "2-digit", minute: "2-digit" })}</p>
+        <p>
+          כניסת שבת:{" "}
+          {new Date(candleLighting.date).toLocaleTimeString("he-IL", {
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
+        </p>
       )}
       {havdalah && (
-        <p>הבדלה: {new Date(havdalah.date).toLocaleTimeString("he-IL", { hour: "2-digit", minute: "2-digit" })}</p>
+        <p>
+          הבדלה:{" "}
+          {new Date(havdalah.date).toLocaleTimeString("he-IL", {
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
+        </p>
       )}
-      {parashat && (
-        <p>פרשת השבוע: {parashat.hebrew}</p>
-      )}
+      {parashat && <p>פרשת השבוע: {parashat.hebrew}</p>}
     </div>
   );
 };
