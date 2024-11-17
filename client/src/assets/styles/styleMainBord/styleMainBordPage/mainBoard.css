@@ -1,0 +1,11 @@
+.main-zemanim{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: yellow;
+    height: 100dvh;
+    width: 100% ;
+
+    left: 0px;
+    top: 30px;
+}

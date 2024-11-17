@@ -1,7 +1,7 @@
 import React from "react";
 import NavbarManager from "../components_manager/navbarManager";
 import AdminDashboard from "../components_manager/adminDashboard";
-import "../assets/styles/styleComponents_manager/home_manager.css";
+import "../../assets/styles/styleManager/stylePages_manager/homeManager.css";
 const Home_manager = () => {
   return (
     <div className="home_manager" dir="rtl">

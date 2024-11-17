@@ -1,0 +1,10 @@
+.shabbat-times{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    background-color: aquamarine;
+    height: 150px;
+    width: 100%;
+}

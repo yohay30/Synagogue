@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import AddNewFriend from "../components_manager/addNewFriend";
 import NavbarManager from "../components_manager/navbarManager";
-import "../assets/styles/stylePages_manager/friendsManager.css";
+import '../../assets/styles/styleManager/stylePages_manager/friendsManager.css';
 
 const FriendsManager = () => {
   const [members, setMembers] = useState([]);
@@ -18,8 +18,6 @@ const FriendsManager = () => {
     id_number: "",
   });
 
-
-  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -34,7 +32,6 @@ const FriendsManager = () => {
     fetchData();
   }, []);
   console.log(members);
-  
 
   const handleSaveChanges = async () => {
     try {
@@ -50,7 +47,9 @@ const FriendsManager = () => {
       );
 
       if (!response.ok) {
-        throw new Error(`Error: failed to update member with ID ${editMember.id}`);
+        throw new Error(
+          `Error: failed to update member with ID ${editMember.id}`
+        );
       }
       const data = await response.json();
 
@@ -85,38 +84,38 @@ const FriendsManager = () => {
 
   const handleSaveNewMember = async () => {
     try {
-      const response = await fetch("http://localhost:5000/friends-manager/add/admin", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newMember),
-      });
-  
+      const response = await fetch(
+        "http://localhost:5000/friends-manager/add/admin",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newMember),
+        }
+      );
+
       if (!response.ok) throw new Error("Failed to add new member");
       const data = await response.json();
       alert("חבר חדש נוספה בהצלחה!");
-  
+
       setMembers((prevMembers) => [...prevMembers, data]);
-      
-        setShowAddForm(false);
-        setNewMember({
-          first_name: "",
-          last_name: "",
-          phone: "",
-          email: "",
-          address: "",
-          password: "",
-          is_admin: 0,
-          id_number: "",
-        });
-      
-      
+
+      setShowAddForm(false);
+      setNewMember({
+        first_name: "",
+        last_name: "",
+        phone: "",
+        email: "",
+        address: "",
+        password: "",
+        is_admin: 0,
+        id_number: "",
+      });
     } catch (error) {
       console.error("Error adding new member:", error);
     }
   };
-  
 
   const handleAddClick = () => {
     setShowAddForm(true);
@@ -180,7 +179,7 @@ const FriendsManager = () => {
                   <input
                     type="checkbox"
                     checked={member.is_admin === 1}
-                    onClick={()=>alert("ניתן לשנות במצב עריכה בלבד")}
+                    onClick={() => alert("ניתן לשנות במצב עריכה בלבד")}
                     readOnly
                   />
                 </td>
@@ -188,7 +187,10 @@ const FriendsManager = () => {
                   <button onClick={() => handleEditClick(member)}>ערוך</button>
                 </td>
                 <td>
-                  <button className="delete-button" onClick={() => handleDeleteClick(member.id)}>
+                  <button
+                    className="delete-button"
+                    onClick={() => handleDeleteClick(member.id)}
+                  >
                     מחק
                   </button>
                 </td>

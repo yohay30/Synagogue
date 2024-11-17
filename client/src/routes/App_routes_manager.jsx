@@ -1,18 +1,18 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-import HomeManager from "../pages_manger/homeManager";
-import AboutManager from "../pages_manger/aboutManager";
-import ContactManager from "../pages_manger/contactManager";
-import EventsManager from "../pages_manger/eventsManager";
-import FriendsManager from "../pages_manger/friendsManager";
-import MassagesManager from "../pages_manger/massagesManager";
-import MemorialsManager from "../pages_manger/memorialsManager";
-import PrayersManager from "../pages_manger/prayersManager";
-import LessonsManager from "../pages_manger/lessonsManager";
-import MainBoard from "../pageMainBoard/mainBoard";
-import ChairsManager from "../pages_manger/chairsManager";
-import HalachaManager from "../pages_manger/halachaManager";
+import HomeManager from "../manager/pages_manger/homeManager";
+import AboutManager from '../manager/pages_manger/aboutManager'
+import ContactManager from "../manager/pages_manger/contactManager";
+import EventsManager from "../manager/pages_manger/eventsManager";
+import FriendsManager from "../manager/pages_manger/friendsManager";
+import MassagesManager from "../manager/pages_manger/massagesManager";
+import MemorialsManager from "../manager/pages_manger/memorialsManager";
+import PrayersManager from "../manager/pages_manger/prayersManager";
+import LessonsManager from "../manager/pages_manger/lessonsManager";
+import MainBoard from "../../src/mainBoard/pageMainBoard/mainBoard";
+import ChairsManager from "../manager/pages_manger/chairsManager";
+import HalachaManager from "../manager/pages_manger/halachaManager";
 
 
 function App_Routes() {

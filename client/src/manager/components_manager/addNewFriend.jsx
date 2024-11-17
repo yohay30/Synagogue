@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../assets/styles/styleComponents_manager/addNewFriend.css";
+import '../../assets/styles/styleManager/styleComponents_manager/addNewFriend.css';
 
 const AddNewFriend = ({
   newMember,

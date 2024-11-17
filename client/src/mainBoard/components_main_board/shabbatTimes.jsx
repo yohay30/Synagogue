@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+ import '../../assets/styles/styleMainBord/styleMainBoardComponnets/shabbatTimes.css';
 
 const ShabbatTimes = () => {
   const [times, setTimes] = useState(null);
@@ -42,33 +43,28 @@ const ShabbatTimes = () => {
   const parashat = times.items.find((item) => item.category === "parashat");
 
   return (
-    <div
+    <div className="shabbat-times"
       style={{
         fontFamily:
           '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
         textAlign: "center",
       }}
     >
-      <h1>{times.title}</h1>
-      {candleLighting && (
-        <p>
+      {parashat && <h1>  {parashat.hebrew}</h1>}
+        <h1>
           כניסת שבת:{" "}
           {new Date(candleLighting.date).toLocaleTimeString("he-IL", {
             hour: "2-digit",
             minute: "2-digit",
           })}
-        </p>
-      )}
-      {havdalah && (
-        <p>
-          הבדלה:{" "}
+        </h1>
+        <h1>
+          יציאת שבת:{" "}
           {new Date(havdalah.date).toLocaleTimeString("he-IL", {
             hour: "2-digit",
             minute: "2-digit",
           })}
-        </p>
-      )}
-      {parashat && <p>פרשת השבוע: {parashat.hebrew}</p>}
+        </h1>      
     </div>
   );
 };

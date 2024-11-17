@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "../assets/styles/styleComponents_manager/navbar_manager.css";
+import "../../assets/styles/styleManager/styleComponents_manager/navbar_manager.css";
 const NavbarManager = () => {
   return (
     <nav className="navbar_manager" dir="rtl">
