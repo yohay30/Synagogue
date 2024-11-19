@@ -5,7 +5,7 @@
     display: flex;
     justify-content: space-between; /* מרחיק את הפריטים מקצוות הניווט */
     align-items: center;
-    
+
     background-color: #f8f8f8; /* צבע רקע עדין */
     padding: 12px 24px;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;

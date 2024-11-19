@@ -1,10 +1,21 @@
+
+
 .main-zemanim{
-    display: flex;
+    display: grid;
+    gap: 0px 0px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      "zemanim "
+     ;
+    grid-template-columns: 4fr 1fr;
     flex-direction: row;
     justify-content: space-between;
-    background-color: yellow;
+    background-color: rgb(51, 209, 88);
     height: 100dvh;
-    width: 100% ;
+  
+    margin: 0;
+    width: 100%;
+    position: 0;
 
     left: 0px;
     top: 30px;

@@ -189,9 +189,7 @@ const FriendsManager = () => {
                 <td>
                   <button
                     className="delete-button"
-                    onClick={() => handleDeleteClick(member.id)}
-                  >
-                    מחק
+                    onClick={() => handleDeleteClick(member.id)}> מחק
                   </button>
                 </td>
               </tr>
