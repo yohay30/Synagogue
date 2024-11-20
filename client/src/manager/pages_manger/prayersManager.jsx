@@ -1,33 +1,48 @@
 import React, { useEffect, useState } from "react";
 import NavbarManager from "../components_manager/navbarManager";
 import "../../assets/styles/styleManager/stylePages_manager/prayersManager.css";
+import AddNewPrayer from "../components_manager/addNewprayers";
 
 const PrayersManager = () => {
   const [prayers, setPrayers] = useState([]);
   const [editPrayer, setEditPrayer] = useState(null);
   const [showAddForm, setShowAddForm] = useState(false);
-  const [newPrayer, setNewPrayer] = useState({
-    Prayer_Type: "",
-    Time: "",
-    Prayer_Date: "",
-    Location: "",
-    Hebrew_Date: "",
-    Description: "",
-  });
+  const [shaharit, setShaharit] = useState([]);
+  const [mincha, setMincha] = useState([]);
+  const [arvit, setArvit] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch("http://localhost:5000/prayers-manager");
-        if (!response.ok) throw new Error("Network response was not ok");
         const data = await response.json();
+        console.log("Fetched prayers:", data); // בדיקה
         setPrayers(data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
+
     fetchData();
   }, []);
+
+  useEffect(() => {
+    // מוודא שברגע שהנתונים מתעדכנים, נוודא שאנחנו ממיינים את התפילות לפי סוג
+    setShaharit(prayers.filter((prayer) => prayer.Prayer_Type === "שחרית"));
+    setMincha(prayers.filter((prayer) => prayer.Prayer_Type === "מנחה"));
+    setArvit(prayers.filter((prayer) => prayer.Prayer_Type === "ערבית"));
+  }, [prayers]);
+
+  const refreshPrayers = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/prayers-manager");
+      if (!response.ok) throw new Error("Failed to refresh prayers");
+      const data = await response.json();
+      setPrayers(data);
+    } catch (error) {
+      console.error("Error refreshing prayers:", error);
+    }
+  };
 
   const handleSaveChanges = async () => {
     try {
@@ -48,7 +63,6 @@ const PrayersManager = () => {
         );
       }
 
-      const data = await response.json();
       setPrayers((prevPrayers) =>
         prevPrayers.map((prayer) =>
           prayer.id === editPrayer.id ? { ...prayer, ...editPrayer } : prayer
@@ -62,6 +76,7 @@ const PrayersManager = () => {
   };
 
   const handleDeleteClick = async (id) => {
+    console.log("Deleting prayer with ID:", id); // בדיקת הערך
     if (window.confirm("האם אתה בטוח שברצונך למחוק את התפילה?")) {
       try {
         await fetch(`http://localhost:5000/prayers-manager/${id}`, {
@@ -76,38 +91,8 @@ const PrayersManager = () => {
     }
   };
 
-  const handleEditClick = (prayer) => setEditPrayer(prayer);
-
-  const handleSaveNewPrayer = async () => {
-    try {
-      const response = await fetch(
-        "http://localhost:5000/prayers-manager/add",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(newPrayer),
-        }
-      );
-
-      if (!response.ok) throw new Error("Failed to add new prayer");
-      const data = await response.json();
-      alert("תפילה חדשה נוספה בהצלחה!");
-
-      setPrayers((prevPrayers) => [...prevPrayers, data]);
-      setShowAddForm(false);
-      setNewPrayer({
-        Prayer_Type: "",
-        Time: "",
-        Prayer_Date: "",
-        Location: "",
-        Hebrew_Date: "",
-        Description: "",
-      });
-    } catch (error) {
-      console.error("Error adding new prayer:", error);
-    }
+  const handleEditClick = (prayer) => {
+    setEditPrayer(prayer);
   };
 
   const handleAddClick = () => {
@@ -130,56 +115,54 @@ const PrayersManager = () => {
           </div>
         </div>
 
+        {/* דיב של תפילות שחרית */}
+        <div>
+          <h2>שחרית</h2>
+          {shaharit.map((prayer, index) => (
+            <div key={index}>
+              <p>תפילה: {prayer.Prayer_Type}</p>
+              <p>שעה: {prayer.Time}</p>
+              <button onClick={() => handleEditClick(prayer)}>ערוך</button>
+              <button onClick={() => handleDeleteClick(prayer.id)}>מחק</button>
+            </div>
+          ))}
+        </div>
+
+        {/* דיב של תפילות מנחה */}
+        <div>
+          <h2>מנחה</h2>
+          {mincha.map((prayer, index) => (
+            <div key={index}>
+              <p>תפילה: {prayer.Prayer_Type}</p>
+              <p>שעה: {prayer.Time}</p>
+              <button onClick={() => handleEditClick(prayer)}>ערוך</button>
+              <button onClick={() => handleDeleteClick(prayer.id)}>מחק</button>
+            </div>
+          ))}
+        </div>
+
+        {/* דיב של תפילות ערבית */}
+        <div>
+          <h2>ערבית</h2>
+          {arvit.map((prayer, index) => (
+            <div key={index}>
+              <p>תפילה: {prayer.Prayer_Type}</p>
+              <p>שעה: {prayer.Time}</p>
+              <button onClick={() => handleEditClick(prayer)}>ערוך</button>
+              <button onClick={() => handleDeleteClick(prayer.id)}>מחק</button>
+            </div>
+          ))}
+        </div>
+
         {showAddForm && (
-          <div>
-            <label>סוג תפילה:</label>
-            <input
-              value={newPrayer.Prayer_Type}
-              onChange={(e) =>
-                setNewPrayer({ ...newPrayer, Prayer_Type: e.target.value })
-              }
-            />
-            <label>שעת תפילה:</label>
-            <input
-              value={newPrayer.Time}
-              onChange={(e) =>
-                setNewPrayer({ ...newPrayer, Time: e.target.value })
-              }
-            />
-            <label>תאריך תפילה:</label>
-            <input
-              value={newPrayer.Prayer_Date}
-              onChange={(e) =>
-                setNewPrayer({ ...newPrayer, Prayer_Date: e.target.value })
-              }
-            />
-            <label>מיקום תפילה:</label>
-            <input
-              value={newPrayer.Location}
-              onChange={(e) =>
-                setNewPrayer({ ...newPrayer, Location: e.target.value })
-              }
-            />
-            <label>תאריך עברי:</label>
-            <input
-              value={newPrayer.Hebrew_Date}
-              onChange={(e) =>
-                setNewPrayer({ ...newPrayer, Hebrew_Date: e.target.value })
-              }
-            />
-            <label>תיאור:</label>
-            <textarea
-              value={newPrayer.Description}
-              onChange={(e) =>
-                setNewPrayer({ ...newPrayer, Description: e.target.value })
-              }
-            />
-            <button onClick={handleSaveNewPrayer}>שמור תפילה</button>
-            <button onClick={() => setShowAddForm(false)}>סגור</button>
-          </div>
+          <AddNewPrayer
+            setShowAddForm={setShowAddForm}
+            refreshPrayers={refreshPrayers}
+          />
         )}
 
-        <table className="table-container">
+        {/* טבלה לתפילות */}
+        <table className="table-container-shaharit">
           <thead>
             <tr>
               <th>#</th>
@@ -194,24 +177,23 @@ const PrayersManager = () => {
             </tr>
           </thead>
           <tbody>
-          {prayers.map((prayer) => (
-  <tr key={prayer.id}> {/* כל תג tr לא יכיל רווחים או טקסט ריק */}
-    <td><strong>{prayer.index}</strong></td>
-    <td>{prayer.Prayer_Type}</td>
-    <td>{prayer.Time}</td>
-    <td>{prayer.Prayer_Date}</td>
-    <td>{prayer.Location}</td>
-    <td>{prayer.Hebrew_Date}</td>
-    <td>{prayer.Description}</td>
-    <td>
-      <button onClick={() => handleEditClick(prayer)}>ערוך</button>
-    </td>
-    <td>
-      <button onClick={() => handleDeleteClick(prayer.id)}>מחק</button>
-    </td>
-  </tr>
-))}
-
+            {prayers.map((prayer, index) => (
+              <tr key={prayer.id}>
+                <td>{index + 1}</td>
+                <td>{prayer.Prayer_Type}</td>
+                <td>{prayer.Time}</td>
+                <td>{prayer.Prayer_Date}</td>
+                <td>{prayer.Location}</td>
+                <td>{prayer.Hebrew_Date}</td>
+                <td>{prayer.Description}</td>
+                <td>
+                  <button onClick={() => handleEditClick(prayer)}>ערוך</button>
+                </td>
+                <td>
+                  <button onClick={() => handleDeleteClick(prayer.id)}>מחק</button>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
 
@@ -255,15 +237,14 @@ const PrayersManager = () => {
                 }
               />
               <label>תיאור:</label>
-              <textarea
+              <input
                 value={editPrayer.Description}
                 onChange={(e) =>
                   setEditPrayer({ ...editPrayer, Description: e.target.value })
                 }
               />
+              <button onClick={handleSaveChanges}>שמור שינויים</button>
             </div>
-            <button onClick={handleSaveChanges}>שמור שינויים</button>
-            <button onClick={() => setEditPrayer(null)}>סגור</button>
           </div>
         )}
       </div>
