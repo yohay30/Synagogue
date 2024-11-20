@@ -1,12 +1,14 @@
 import React, { useState } from "react";
-import '../../assets/styles/styleManager/styleComponents_manager/addNewFriend.css';
-
+import "../../assets/styles/styleManager/styleComponents_manager/addNewFriend.css";
+import { useForm } from "react-hook-form";
 const AddNewFriend = ({
   newMember,
   setNewMember,
   handleSaveNewMember,
   setShowAddForm,
 }) => {
+  const { register, handleSubmit, watch } = useForm();
+
   const handleSendNewMember = () => {
     try {
       const response = fetch(
@@ -30,7 +32,9 @@ const AddNewFriend = ({
     }
   };
 
-  const [errors, setErrors] = useState({});
+  const onSubmit = (data) => {
+    console.log(data);
+  };
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
@@ -51,7 +55,58 @@ const AddNewFriend = ({
   return (
     <div>
       <div className="add-friend-modal">
-        <form onSubmit={handleFormSubmit}>
+      <form onSubmit={handleSubmit(onSubmit)}>
+  <label>שם פרטי:</label>
+  <input {...register("first_name", { required: true })} />
+
+  <label>שם משפחה:</label>
+  <input {...register("last_name", { required: true })} />
+
+  <label>טלפון:</label>
+  <input
+    type="tel"
+    {...register("phone", {
+      required: true,
+      pattern: /^[0-9]{10}$/, // בדיקת פורמט של מספר טלפון
+    })}
+  />
+
+  <label>אימייל:</label>
+  <input
+    type="email"
+    {...register("email", {
+      required: true,
+      pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, // אימות של כתובת אימייל
+    })}
+  />
+
+  <label>כתובת:</label>
+  <input {...register("address")} />
+
+  <label>סיסמה:</label>
+  <input
+    type="password"
+    {...register("password", {
+      required: true,
+      minLength: 6, // דרישה למינימום 6 תווים
+    })}
+  />
+
+  <label>מנהל:</label>
+  <input type="checkbox" {...register("is_admin")} />
+
+  <label>מספר תעודת זהות:</label>
+  <input
+    {...register("id_number", {
+      required: true,
+      pattern: /^[0-9]{9}$/, // בדיקת פורמט של ת"ז (9 ספרות)
+    })}
+  />
+
+  <input type="submit" value="שלח" />
+</form>
+
+        {/* <form onSubmit={handleFormSubmit}>
           <label>שם פרטי:</label>
           <input
             required
@@ -148,7 +203,7 @@ const AddNewFriend = ({
             סגור
           </button>
           {console.log(newMember.first_name, "newMember")}
-        </form>
+        </form> */}
       </div>
     </div>
   );
