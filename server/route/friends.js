@@ -19,7 +19,7 @@ router.get("/", (req, res) => {
 
 // הוספת חבר קהילה
 
-router.post("/add/admin", (req, res) => {
+router.post("/add", (req, res) => {
   console.log("req.body -",req.body);
   
   const { first_name, last_name, phone, email, address, password, is_admin , id_number } = req.body;
