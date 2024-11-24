@@ -8,7 +8,7 @@ const NavbarManager = () => {
         {localStorage.getItem("username")} ברוך הבא
       </h1>
       <Link to="/home-manager">ראשי</Link>
-      <Link to="/main-board">לוח תצוגה ראשי</Link>
+      <Link to="/main-board">לוח תצוגה </Link>
       <Link to="/prayers-manager">תפילות </Link>
       <Link to="/lessons-manager">שיעורים </Link>
       <Link to="/massages-manager">הודעות</Link>
