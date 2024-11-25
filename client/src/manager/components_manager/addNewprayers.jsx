@@ -52,6 +52,8 @@ const AddNewPrayer = ({ setShowAddForm, refreshPrayers }) => {
           <option value="חול">חול</option>
           <option value="שבת">שבת</option>
           <option value="חג">חג</option>
+          <option value="כיפור">כיפור</option>
+          <option value="כיפור">כיפור</option>
         </select>
 
         <label>תאריך תפילה:</label>
