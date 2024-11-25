@@ -7,9 +7,6 @@ const PrayersManager = () => {
   const [prayers, setPrayers] = useState([]);
   const [editPrayer, setEditPrayer] = useState(null);
   const [showAddForm, setShowAddForm] = useState(false);
-  const [shaharit, setShaharit] = useState([]);
-  const [mincha, setMincha] = useState([]);
-  const [arvit, setArvit] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -25,13 +22,6 @@ const PrayersManager = () => {
 
     fetchData();
   }, []);
-
-  useEffect(() => {
-    // מוודא שברגע שהנתונים מתעדכנים, נוודא שאנחנו ממיינים את התפילות לפי סוג
-    setShaharit(prayers.filter((prayer) => prayer.Prayer_Type === "שחרית"));
-    setMincha(prayers.filter((prayer) => prayer.Prayer_Type === "מנחה"));
-    setArvit(prayers.filter((prayer) => prayer.Prayer_Type === "ערבית"));
-  }, [prayers]);
 
   const refreshPrayers = async () => {
     try {
@@ -109,49 +99,240 @@ const PrayersManager = () => {
         <div style={{ height: "150px" }}></div>
 
         <div className="title">
-          <h1>ניהול תפילות</h1>
+          <h1> תפילות</h1>
           <div className="btn-container">
             <button onClick={handleAddClick}>הוסף תפילה חדשה</button>
           </div>
         </div>
 
-        {/* דיב של תפילות שחרית */}
+        {/* דיב של תפילות ליום חול */}
+        <h2>תפילות ליום חול</h2>
         <div>
-          <h2>שחרית</h2>
-          {shaharit.map((prayer, index) => (
-            <div key={index}>
-              <p>תפילה: {prayer.Prayer_Type}</p>
-              <p>שעה: {prayer.Time}</p>
-              <button onClick={() => handleEditClick(prayer)}>ערוך</button>
-              <button onClick={() => handleDeleteClick(prayer.id)}>מחק</button>
-            </div>
-          ))}
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>סוג תפילה</th>
+                <th>שעת תפילה</th>
+                <th>תאריך תפילה</th>
+                <th>מיקום תפילה</th>
+                <th>תאריך עברי</th>
+                <th>תיאור</th>
+                <th>ערוך</th>
+                <th>מחק</th>
+              </tr>
+            </thead>
+            <tbody>
+              <h3> שחרית</h3>
+
+              {prayers
+                .filter(
+                  (prayer) =>
+                    prayer.Day_Type === "חול" && prayer.Prayer_Type === "שחרית"
+                )
+                .map((prayer, index) => (
+                  <tr key={index}>
+                    <td>{index + 1}</td>
+                    <td>{prayer.Prayer_Type}</td>
+                    <td>{prayer.Time}</td>
+                    <td>{prayer.Prayer_Date}</td>
+                    <td>{prayer.Location}</td>
+                    <td>{prayer.Hebrew_Date}</td>
+                    <td>{prayer.Description}</td>
+                    <td>
+                      <button onClick={() => handleEditClick(prayer)}>
+                        ערוך
+                      </button>
+                    </td>
+                    <td>
+                      <button onClick={() => handleDeleteClick(prayer.id)}>
+                        מחק
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <table>
+            <tbody>
+              <h3> מנחה</h3>
+              {prayers
+                .filter(
+                  (prayer) =>
+                    prayer.Day_Type === "חול" && prayer.Prayer_Type === "מנחה"
+                )
+                .map((prayer, index) => (
+                  <tr key={index}>
+                    <td>{index + 1}</td>
+                    <td>{prayer.Prayer_Type}</td>
+                    <td>{prayer.Time}</td>
+                    <td>{prayer.Prayer_Date}</td>
+                    <td>{prayer.Location}</td>
+                    <td>{prayer.Hebrew_Date}</td>
+                    <td>{prayer.Description}</td>
+                    <td>
+                      <button onClick={() => handleEditClick(prayer)}>
+                        ערוך
+                      </button>
+                    </td>
+                    <td>
+                      <button onClick={() => handleDeleteClick(prayer.id)}>
+                        מחק
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <table>
+            <tbody>
+              <h3> ערבית</h3>
+
+              {prayers
+                .filter(
+                  (prayer) =>
+                    prayer.Day_Type === "חול" && prayer.Prayer_Type === "ערבית"
+                )
+                .map((prayer, index) => (
+                  <tr key={index}>
+                    <td>{index + 1}</td>
+                    <td>{prayer.Prayer_Type}</td>
+                    <td>{prayer.Time}</td>
+                    <td>{prayer.Prayer_Date}</td>
+                    <td>{prayer.Location}</td>
+                    <td>{prayer.Hebrew_Date}</td>
+                    <td>{prayer.Description}</td>
+                    <td>
+                      <button onClick={() => handleEditClick(prayer)}>
+                        ערוך
+                      </button>
+                    </td>
+                    <td>
+                      <button onClick={() => handleDeleteClick(prayer.id)}>
+                        מחק
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
         </div>
 
-        {/* דיב של תפילות מנחה */}
-        <div>
-          <h2>מנחה</h2>
-          {mincha.map((prayer, index) => (
-            <div key={index}>
-              <p>תפילה: {prayer.Prayer_Type}</p>
-              <p>שעה: {prayer.Time}</p>
-              <button onClick={() => handleEditClick(prayer)}>ערוך</button>
-              <button onClick={() => handleDeleteClick(prayer.id)}>מחק</button>
-            </div>
-          ))}
-        </div>
+        <h1>תפילות ליום שבת וחג</h1>
 
-        {/* דיב של תפילות ערבית */}
         <div>
-          <h2>ערבית</h2>
-          {arvit.map((prayer, index) => (
-            <div key={index}>
-              <p>תפילה: {prayer.Prayer_Type}</p>
-              <p>שעה: {prayer.Time}</p>
-              <button onClick={() => handleEditClick(prayer)}>ערוך</button>
-              <button onClick={() => handleDeleteClick(prayer.id)}>מחק</button>
-            </div>
-          ))}
+          <h3> שחרית</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>סוג תפילה</th>
+                <th>שעת תפילה</th>
+                <th>תאריך תפילה</th>
+                <th>מיקום תפילה</th>
+                <th>תאריך עברי</th>
+                <th>תיאור</th>
+                <th>ערוך</th>
+                <th>מחק</th>
+              </tr>
+            </thead>
+            <tbody>
+              {prayers
+                .filter(
+                  (prayer) =>
+                    prayer.Day_Type === "שבת" && prayer.Prayer_Type === "שחרית"
+                )
+                .map((prayer, index) => (
+                  <tr key={index}>
+                    <td>{index + 1}</td>
+                    <td>{prayer.Prayer_Type}</td>
+                    <td>{prayer.Time}</td>
+                    <td>{prayer.Prayer_Date}</td>
+                    <td>{prayer.Location}</td>
+                    <td>{prayer.Hebrew_Date}</td>
+                    <td>{prayer.Description}</td>
+                    <td>
+                      <button onClick={() => handleEditClick(prayer)}>
+                        ערוך
+                      </button>
+                    </td>
+                    <td>
+                      <button onClick={() => handleDeleteClick(prayer.id)}>
+                        מחק
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+
+          <div>
+            <h3> מנחה</h3>
+            <table>
+              <tbody>
+                {prayers
+                  .filter(
+                    (prayer) =>
+                      prayer.Day_Type === "שבת" && prayer.Prayer_Type === "מנחה"
+                  )
+                  .map((prayer, index) => (
+                    <tr key={index}>
+                      <td>{index + 1}</td>
+                      <td>{prayer.Location}</td>
+                      <td>{prayer.Time}</td>
+                      <td>
+                        <button onClick={() => handleEditClick(prayer)}>
+                          ערוך
+                        </button>
+                      </td>
+                      <td>
+                        <button onClick={() => handleDeleteClick(prayer.id)}>
+                          מחק
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
+          <div>
+            <h3> ערבית</h3>
+            <table>
+              <tbody>
+                {prayers
+                  .filter(
+                    (prayer) =>
+                      prayer.Day_Type === "שבת" &&
+                      prayer.Prayer_Type === "ערבית"
+                  )
+                  .map((prayer, index) => (
+                    <tr key={index}>
+                      <td>{index + 1}</td>
+                      <td>{prayer.Prayer_Type}</td>
+                      <td>{prayer.Time}</td>
+                      <td>{prayer.Prayer_Date}</td>
+                      <td>{prayer.Location}</td>
+                      <td>{prayer.Hebrew_Date}</td>
+                      <td>{prayer.Description}</td>
+                      <td>
+                        <button onClick={() => handleEditClick(prayer)}>
+                          ערוך
+                        </button>
+                      </td>
+                      <td>
+                        <button onClick={() => handleDeleteClick(prayer.id)}>
+                          מחק
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
         </div>
 
         {showAddForm && (
@@ -160,42 +341,6 @@ const PrayersManager = () => {
             refreshPrayers={refreshPrayers}
           />
         )}
-
-        {/* טבלה לתפילות */}
-        <table className="table-container-shaharit">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>סוג תפילה</th>
-              <th>שעת תפילה</th>
-              <th>תאריך תפילה</th>
-              <th>מיקום תפילה</th>
-              <th>תאריך עברי</th>
-              <th>תיאור</th>
-              <th>ערוך</th>
-              <th>מחק</th>
-            </tr>
-          </thead>
-          <tbody>
-            {prayers.map((prayer, index) => (
-              <tr key={prayer.id}>
-                <td>{index + 1}</td>
-                <td>{prayer.Prayer_Type}</td>
-                <td>{prayer.Time}</td>
-                <td>{prayer.Prayer_Date}</td>
-                <td>{prayer.Location}</td>
-                <td>{prayer.Hebrew_Date}</td>
-                <td>{prayer.Description}</td>
-                <td>
-                  <button onClick={() => handleEditClick(prayer)}>ערוך</button>
-                </td>
-                <td>
-                  <button onClick={() => handleDeleteClick(prayer.id)}>מחק</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
 
         {editPrayer && (
           <div>

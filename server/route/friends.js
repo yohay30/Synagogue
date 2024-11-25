@@ -18,19 +18,11 @@ router.get("/", (req, res) => {
 
 
 // הוספת חבר קהילה
-router.post("/add", (req, res) => {
-  console.log("Received data:", req.body);
 
-  const {
-    first_name,
-    last_name,
-    phone,
-    email,
-    address,
-    password,
-    id_number,
-    is_admin,
-  } = req.body;
+router.post("/add/admin", (req, res) => {
+  console.log("req.body -",req.body);
+  
+  const { first_name, last_name, phone, email, address, password, is_admin , id_number } = req.body;
 
   // בדיקה האם כל השדות הנדרשים קיימים
   if (!first_name || !last_name || !phone || !email || !id_number) {
