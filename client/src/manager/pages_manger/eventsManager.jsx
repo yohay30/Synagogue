@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import NavbarManager from '../components_manager/navbarManager';
+import NavbarManager from "../components_manager/navbarManager";
+import "../../assets/styles/styleManager/stylePages_manager/eventsManager.css";
 
 const EventsManager = () => {
   const [events, setEvents] = useState([]);
@@ -42,7 +43,9 @@ const EventsManager = () => {
       );
 
       if (!response.ok) {
-        throw new Error(`Error: failed to update event with ID ${editEvent.id}`);
+        throw new Error(
+          `Error: failed to update event with ID ${editEvent.id}`
+        );
       }
 
       setEvents((prevEvents) =>
@@ -74,16 +77,13 @@ const EventsManager = () => {
 
   const handleSaveNewEvent = async () => {
     try {
-      const response = await fetch(
-        "http://localhost:5000/events-manager/add",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(newEvent),
-        }
-      );
+      const response = await fetch("http://localhost:5000/events-manager/add", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newEvent),
+      });
 
       if (!response.ok) throw new Error("Failed to add new event");
 
@@ -91,7 +91,13 @@ const EventsManager = () => {
       setEvents((prevEvents) => [...prevEvents, data]);
       alert("אירוע חדש נוסף בהצלחה!");
       setShowAddForm(false);
-      setNewEvent({ event_name: "", event_date: "", event_time: "", location: "", description: "" });
+      setNewEvent({
+        event_name: "",
+        event_date: "",
+        event_time: "",
+        location: "",
+        description: "",
+      });
     } catch (error) {
       console.error("Error adding new event:", error);
     }
@@ -99,18 +105,22 @@ const EventsManager = () => {
 
   return (
     <div>
-      <NavbarManager />
-      <div className="events_manager" dir="rtl">
+      <header>
+        <NavbarManager />
+      </header>
+      <div className="base_manager" dir="rtl">
         <div style={{ height: "150px" }}></div>
         <div className="title">
           <h1>לוח אירועים</h1>
           <div className="btn-container">
-            <button onClick={() => setShowAddForm(true)}>הוסף אירוע</button>
+            <button className="add-button" onClick={() => setShowAddForm(true)}>
+              הוסף אירוע
+            </button>
           </div>
         </div>
 
         {showAddForm && (
-          <div className="add-form">
+          <div className="add-button">
             <h2>הוסף אירוע חדש</h2>
             <label>שם האירוע:</label>
             <input
@@ -155,7 +165,7 @@ const EventsManager = () => {
         )}
 
         <table className="table-container">
-          <thead>
+          <thead className="thead">
             <tr>
               <th>#</th>
               <th>שם האירוע</th>
@@ -177,7 +187,12 @@ const EventsManager = () => {
                 <td>{event.location}</td>
                 <td>{event.description}</td>
                 <td>
-                  <button onClick={() => setEditEvent(event)}>ערוך</button>
+                  <button
+                    className="edit-button"
+                    onClick={() => setEditEvent(event)}
+                  >
+                    ערוך
+                  </button>
                 </td>
                 <td>
                   <button
@@ -193,49 +208,57 @@ const EventsManager = () => {
         </table>
 
         {editEvent && (
-          <div className="edit-modal">
-            <h2>עריכת אירוע</h2>
-            <label>שם האירוע:</label>
-            <input
-              value={editEvent.event_name}
-              onChange={(e) =>
-                setEditEvent({ ...editEvent, event_name: e.target.value })
-              }
-            />
-            <label>תאריך האירוע:</label>
-            <input
-              type="date"
-              value={editEvent.event_date}
-              onChange={(e) =>
-                setEditEvent({ ...editEvent, event_date: e.target.value })
-              }
-            />
-            <label>שעת האירוע:</label>
-            <input
-              type="time"
-              value={editEvent.event_time}
-              onChange={(e) =>
-                setEditEvent({ ...editEvent, event_time: e.target.value })
-              }
-            />
-            <label>מיקום:</label>
-            <input
-              value={editEvent.location}
-              onChange={(e) =>
-                setEditEvent({ ...editEvent, location: e.target.value })
-              }
-            />
-            <label>תיאור:</label>
-            <textarea
-              value={editEvent.description}
-              onChange={(e) =>
-                setEditEvent({ ...editEvent, description: e.target.value })
-              }
-            />
-            <button onClick={handleSaveChanges}>שמור שינויים</button>
-            <button onClick={() => setEditEvent(null)}>סגור</button>
-          </div>
+          <>
+            <div className="overlay" onClick={() => setEditEvent(null)}></div>
+
+            <div className="edit-form">
+              <h2>עריכת אירוע</h2>
+              <label>שם האירוע:</label>
+              <input
+                value={editEvent.event_name}
+                onChange={(e) =>
+                  setEditEvent({ ...editEvent, event_name: e.target.value })
+                }
+              />
+              <label>תאריך האירוע:</label>
+              <input
+                type="date"
+                value={editEvent.event_date}
+                onChange={(e) =>
+                  setEditEvent({ ...editEvent, event_date: e.target.value })
+                }
+              />
+              <label>שעת האירוע:</label>
+              <input
+                type="time"
+                value={editEvent.event_time}
+                onChange={(e) =>
+                  setEditEvent({ ...editEvent, event_time: e.target.value })
+                }
+              />
+              <label>מיקום:</label>
+              <input
+                value={editEvent.location}
+                onChange={(e) =>
+                  setEditEvent({ ...editEvent, location: e.target.value })
+                }
+              />
+              <label>תיאור:</label>
+              <textarea
+                value={editEvent.description}
+                onChange={(e) =>
+                  setEditEvent({ ...editEvent, description: e.target.value })
+                }
+              />
+              <button onClick={handleSaveChanges}>שמור שינויים</button>
+              <button onClick={() => setEditEvent(null)}>סגור</button>
+            </div>
+          </>
         )}
+                <div style={{ height: "100px" }}></div>
+                <footer className="footer">
+          <p>&copy; 2024 Synagogue Management@System. All rights reserved.</p>
+        </footer>
       </div>
     </div>
   );
