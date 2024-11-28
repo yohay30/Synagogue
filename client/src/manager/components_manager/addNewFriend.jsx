@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import "../../assets/styles/styleManager/styleComponents_manager/addNewFriend.css";
 import { useForm } from "react-hook-form";
@@ -47,52 +48,67 @@ const AddNewFriend = ({ setShowAddForm }) => {
       <div className="add-friend-modal">
         <h2>הוספת חבר חדש</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <label>שם פרטי:</label>
-          <input {...register("first_name", { required: true })} />
-
-          <label>שם משפחה:</label>
-          <input {...register("last_name", { required: true })} />
-
-          <label>טלפון:</label>
-          <input
-            type="tel"
-            {...register("phone", {
-              required: true,
-              pattern: /^[0-9]{10}$/, // בדיקת פורמט טלפון
-            })}
-          />
-
-          <label>אימייל:</label>
-          <input
-            type="email"
-            {...register("email", {
-              required: true,
-              pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, // אימות אימייל
-            })}
-          />
-
-          <label>כתובת:</label>
-          <input {...register("address")} />
-
-          <label>סיסמה:</label>
-          <input
-            type="password"
-            {...register("password", {
-              required: true,
-              minLength: 6, // דרישת מינימום 6 תווים
-            })}
-          />
-
-          <label>מספר תעודת זהות:</label>
-          <input
-            {...register("id_number", {
-              required: true,
-              pattern: /^[0-9]{9}$/, // בדיקת פורמט של ת"ז
-            })}
-          />
-
-          <label>מנהל:</label>
-          <input type="checkbox" {...register("is_admin")} />
+          <div className="form-grid">
+            <div>
+              <label>שם פרטי:</label>
+              <input {...register("first_name", { required: true })} />
+            </div>
+            <div>
+              <label>שם משפחה:</label>
+              <input {...register("last_name", { required: true })} />
+            </div>
+            <div>
+              <label>טלפון:</label>
+              <input
+                type="tel"
+                {...register("phone", {
+                  required: true,
+                  pattern: /^[0-9]{10}$/, // בדיקת פורמט טלפון
+                })}
+              />
+            </div>
+            <div>
+              <label>אימייל:</label>
+              <input
+                type="email"
+                {...register("email", {
+                  required: true,
+                  pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, // אימות אימייל
+                })}
+              />
+            </div>
+            <div>
+              <label>כתובת:</label>
+              <input {...register("address")} />
+            </div>
+            <div>
+              <label>סיסמה:</label>
+              <input
+                type="password"
+                {...register("password", {
+                  required: true,
+                  minLength: 6, // דרישת מינימום 6 תווים
+                })}
+              />
+            </div>
+            <div>
+              <label>מספר תעודת זהות:</label>
+              <input
+                {...register("id_number", {
+                  required: true,
+                  pattern: /^[0-9]{9}$/, // בדיקת פורמט של ת"ז
+                })}
+              />
+            </div>
+            <div>
+              <label>כיסא מספר</label>
+              <input {...register("chair_number")} />
+            </div>
+            <div>
+              <label>מנהל:</label>
+              <input type="checkbox" {...register("is_admin")} />
+            </div>
+          </div>
 
           <div className="form-actions">
             <button type="submit" disabled={loading}>

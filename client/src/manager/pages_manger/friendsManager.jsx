@@ -1,10 +1,14 @@
+// src/pages_manager/FriendsManager.js
+
 import React, { useEffect, useState } from "react";
 import AddNewFriend from "../components_manager/addNewFriend";
 import NavbarManager from "../components_manager/navbarManager";
-import '../../assets/styles/styleManager/stylePages_manager/friendsManager.css';
+import "../../assets/styles/styleManager/stylePages_manager/friendsManager.css";
 
 const FriendsManager = () => {
   const [members, setMembers] = useState([]);
+  const [filteredMembers, setFilteredMembers] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [editMember, setEditMember] = useState(null);
   const [showAddForm, setShowAddForm] = useState(false);
   const [newMember, setNewMember] = useState({
@@ -16,6 +20,7 @@ const FriendsManager = () => {
     password: "",
     is_admin: 0,
     id_number: "",
+    chair_number: "",
   });
 
   useEffect(() => {
@@ -25,13 +30,25 @@ const FriendsManager = () => {
         if (!response.ok) throw new Error("Network response was not ok");
         const data = await response.json();
         setMembers(data);
+        setFilteredMembers(data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
     fetchData();
   }, []);
- 
+
+  const handleSearch = (event) => {
+    const query = event.target.value.toLowerCase();
+    setSearchQuery(query);
+    const filtered = members.filter(
+      (member) =>
+        member.first_name.toLowerCase().includes(query) ||
+        member.last_name.toLowerCase().includes(query) ||
+        member.phone.includes(query)
+    );
+    setFilteredMembers(filtered);
+  };
 
   const handleSaveChanges = async () => {
     try {
@@ -45,14 +62,8 @@ const FriendsManager = () => {
           body: JSON.stringify(editMember),
         }
       );
-
-      if (!response.ok) {
-        throw new Error(
-          `Error: failed to update member with ID ${editMember.id}`
-        );
-      }
+      if (!response.ok) throw new Error(`Error updating member`);
       const data = await response.json();
-
       setMembers((prevMembers) =>
         prevMembers.map((member) =>
           member.id === editMember.id ? { ...member, ...editMember } : member
@@ -72,6 +83,9 @@ const FriendsManager = () => {
           method: "DELETE",
         });
         setMembers((prevMembers) =>
+          prevMembers.filter((member) => member.id !== id)
+        );
+        setFilteredMembers((prevMembers) =>
           prevMembers.filter((member) => member.id !== id)
         );
       } catch (error) {
@@ -94,13 +108,11 @@ const FriendsManager = () => {
           body: JSON.stringify(newMember),
         }
       );
-
       if (!response.ok) throw new Error("Failed to add new member");
       const data = await response.json();
       alert("חבר חדש נוספה בהצלחה!");
-
       setMembers((prevMembers) => [...prevMembers, data]);
-
+      setFilteredMembers((prevMembers) => [...prevMembers, data]);
       setShowAddForm(false);
       setNewMember({
         first_name: "",
@@ -111,29 +123,38 @@ const FriendsManager = () => {
         password: "",
         is_admin: 0,
         id_number: "",
+        chair_number: "",
       });
     } catch (error) {
       console.error("Error adding new member:", error);
     }
   };
 
-  const handleAddClick = () => {
-    setShowAddForm(true);
-  };
+  const handleAddClick = () => setShowAddForm(true);
 
   return (
-    <div>
+    <div className="base-manager">
       <header>
         <NavbarManager />
       </header>
 
-      <div className="friends_manager" dir="rtl">
-        <div style={{ height: "150px" }}></div>
+      <div className="base-manager-container" dir="rtl">
+        <div style={{ height: "100px" }}></div>
 
         <div className="title">
           <h1>חברים בקהילה</h1>
+          <div className="search-container">
+            <input
+              type="text"
+              placeholder="חפש לפי שם, משפחה, או פלאפון"
+              value={searchQuery}
+              onChange={handleSearch}
+            />
+          </div>
           <div className="btn-container">
-            <button onClick={handleAddClick}>הוסף חבר חדש</button>
+            <button className="add-button" onClick={handleAddClick}>
+              הוסף חבר חדש
+            </button>
           </div>
         </div>
 
@@ -150,46 +171,44 @@ const FriendsManager = () => {
           <thead className="thead">
             <tr>
               <th>#</th>
-              <th>פרטי</th>
-              <th>משפחה</th>
-              <th>מס זהות</th>
+              <th>שם פרטי</th>
+              <th>שם משפחה</th>
               <th>טלפון</th>
               <th>אימייל</th>
-              <th>סיסמה</th>
               <th>כתובת</th>
+              <th>כיסא מספר</th>
               <th>מנהל</th>
               <th>ערוך</th>
               <th>מחק</th>
             </tr>
           </thead>
           <tbody>
-            {members.map((member, index) => (
+            {filteredMembers.map((member, index) => (
               <tr key={member.id}>
                 <td>
                   <strong>{index + 1}</strong>
                 </td>
                 <td>{member.first_name}</td>
                 <td>{member.last_name}</td>
-                <td>{member.id_number}</td>
                 <td>{member.phone}</td>
                 <td>{member.email}</td>
-                <td>{member.password}</td>
                 <td>{member.address}</td>
+                <td>{member.chair_number}</td>
+                <td>{member.is_admin === 1 ? "כן" : "לא"}</td>
                 <td>
-                  <input
-                    type="checkbox"
-                    checked={member.is_admin === 1}
-                    onClick={() => alert("ניתן לשנות במצב עריכה בלבד")}
-                    readOnly
-                  />
-                </td>
-                <td>
-                  <button onClick={() => handleEditClick(member)}>ערוך</button>
+                  <button
+                    className="edit-button"
+                    onClick={() => handleEditClick(member)}
+                  >
+                    ערוך
+                  </button>
                 </td>
                 <td>
                   <button
                     className="delete-button"
-                    onClick={() => handleDeleteClick(member.id)}> מחק
+                    onClick={() => handleDeleteClick(member.id)}
+                  >
+                    מחק
                   </button>
                 </td>
               </tr>
@@ -199,12 +218,9 @@ const FriendsManager = () => {
 
         {editMember && (
           <>
-            <div
-              className="modal-overlay"
-              onClick={() => setEditMember(null)}
-            ></div>
-            <div className="edit-modal">
-              <h2>עריכה </h2>
+            <div className="overlay" onClick={() => setEditMember(null)}></div>
+            <div className="edit-form">
+              <h2>עריכה</h2>
               <label>שם פרטי:</label>
               <input
                 value={editMember.first_name}
@@ -240,18 +256,11 @@ const FriendsManager = () => {
                   setEditMember({ ...editMember, address: e.target.value })
                 }
               />
-              <label>סיסמה:</label>
+              <label>כיסא מספר:</label>
               <input
-                value={editMember.password}
+                value={editMember?.chair_number || ""}
                 onChange={(e) =>
-                  setEditMember({ ...editMember, password: e.target.value })
-                }
-              />
-              <label>מס זהות:</label>
-              <input
-                value={editMember.id_number}
-                onChange={(e) =>
-                  setEditMember({ ...editMember, id_number: e.target.value })
+                  setEditMember({ ...editMember, chair_number: e.target.value })
                 }
               />
               <label>מנהל:</label>
@@ -270,6 +279,11 @@ const FriendsManager = () => {
             </div>
           </>
         )}
+        <div style={{ height: "100px" }}></div>
+
+        <footer className="footer">
+          <p>&copy; 2023 Synagogue Management System. All rights reserved.</p>
+        </footer>
       </div>
     </div>
   );

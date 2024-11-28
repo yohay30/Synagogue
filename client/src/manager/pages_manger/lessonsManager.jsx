@@ -166,6 +166,7 @@ export default function Lessons_manager() {
               <th>יום</th>
               <th>שעה</th>
               <th>מיקום</th>
+              <th>מס משתתפים</th>
               <th>ערוך</th>
               <th>מחק</th>
             </tr>
@@ -179,6 +180,7 @@ export default function Lessons_manager() {
                 <td>{lesson.day_of_week}</td>
                 <td>{lesson.lesson_time}</td>
                 <td>{lesson.location}</td>
+                <td>{lesson.Participants}</td>
                 <td>
                   <button onClick={() => setEditLesson(lesson)}>ערוך</button>
                 </td>
