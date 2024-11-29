@@ -14,36 +14,49 @@ router.get("/", (req, res) => {
   });
 });
 
-
-
-
 // הוספת חבר קהילה
 
 router.post("/add", (req, res) => {
-  console.log("req.body -",req.body);
-  
-  const { first_name, last_name, phone, email, address, password, is_admin , id_number } = req.body;
+  console.log("req.body -", req.body);
+
+  const {
+    first_name,
+    last_name,
+    phone,
+    email,
+    address,
+    password,
+    is_admin,
+    id_number,
+    chair_number,
+  } = req.body;
 
   // בדוק אם למשתמש הנוכחי יש הרשאות מנהל
- 
 
-  const sql = "INSERT INTO community_members2 (first_name, last_name, phone, email, address, password, is_admin , id_number) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-  const values = [first_name, last_name, phone, email, address, password, is_admin, id_number];
+  const sql =
+    "INSERT INTO community_members2 (first_name, last_name, phone, email, address, password, is_admin , id_number, chair_number) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+  const values = [
+    first_name,
+    last_name,
+    phone,
+    email,
+    address,
+    password,
+    is_admin,
+    id_number,
+    chair_number,
+  ];
 
   connection.query(sql, values, (err, result) => {
     if (err) {
       console.log(err);
-      
+
       return res.status(500).json({ error: "Error adding member" });
     }
-    
+
     res.status(201).json({ id: result.insertId, first_name, last_name });
-  }
-  );
+  });
 });
-
-
-
 
 // עדכון הרשאת משתמש
 router.put("/:id/admin", (req, res) => {
@@ -68,9 +81,6 @@ router.put("/:id/admin", (req, res) => {
   });
 });
 
-
-
-
 // מחיקת חבר קהילה לפי מזהה
 router.delete("/:id", (req, res) => {
   const { id } = req.params; // מזהה החבר למחיקה
@@ -86,14 +96,32 @@ router.delete("/:id", (req, res) => {
   });
 });
 
-
 // עדכון חבר בקהילה
 router.put("/:id", (req, res) => {
   const { id } = req.params;
-  const { first_name, last_name, phone, email, address, is_admin } = req.body;
+  const {
+    first_name,
+    last_name,
+    phone,
+    email,
+    address,
+    is_admin,
+    id_number,
+    chair_number,
+  } = req.body;
 
-  const sql = `UPDATE community_members2 SET first_name = ?, last_name = ?, phone = ?, email = ?, address = ?, is_admin = ? WHERE id = ?`;
-  const values = [first_name, last_name, phone, email, address, is_admin, id];
+  const sql = `UPDATE community_members2 SET first_name = ?, last_name = ?, phone = ?, email = ?, address = ?, is_admin = ? , id_number = ?, chair_number = ?  WHERE id = ?`;
+  const values = [
+    first_name,
+    last_name,
+    phone,
+    email,
+    address,
+    is_admin,
+    id_number,
+    chair_number,
+    id,
+  ];
 
   connection.query(sql, values, (err, result) => {
     if (err) {
