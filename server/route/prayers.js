@@ -14,22 +14,24 @@ router.get("/", (req, res) => {
   });
 });
 
-// הוספת תפילה חדשה
 router.post("/add", (req, res) => {
-  const { Prayer_Type, Time, Prayer_Date, Location, Hebrew_Date, Description } = req.body;
+  const { Prayer_Type, Time, Day_Type, Prayer_Date, Location, Hebrew_Date, Description } = req.body;
   
-  const sql = "INSERT INTO prayers (Prayer_Type, Time, Prayer_Date, Location, Hebrew_Date, Description) VALUES (?, ?, ?, ?, ?, ?)";
-  const values = [Prayer_Type, Time, Prayer_Date, Location, Hebrew_Date, Description];
+  const sql = `INSERT INTO prayers 
+    (Prayer_Type, Time, Day_Type, Prayer_Date, Hebrew_Date, Location, Description) 
+    VALUES (?, ?, ?, ?, ?, ?, ?)`;
+
+  const values = [Prayer_Type, Time, Day_Type, Prayer_Date, Hebrew_Date, Location, Description];
 
   connection.query(sql, values, (err, result) => {
     if (err) {
       console.log(err);
       return res.status(500).json({ error: "Error adding prayer" });
     }
-    
     res.status(201).json({ id: result.insertId, Prayer_Type, Time });
   });
 });
+
 
 // עדכון תפילה
 router.put("/:id", (req, res) => {

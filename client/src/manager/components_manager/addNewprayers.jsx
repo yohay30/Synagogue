@@ -58,7 +58,7 @@ const AddNewPrayer = ({ setShowAddForm, refreshPrayers }) => {
 
         <label>תאריך תפילה:</label>
         <input
-          {...register("Prayer_Date", { required: "תאריך תפילה חובה" })}
+          {...register("Prayer_Date")} 
           type="date"
           placeholder="הכנס תאריך תפילה"
         />
