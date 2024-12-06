@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from "react";
-import NavbarManager from '../components_manager/navbarManager';
+import NavbarManager from "../components_manager/navbarManager";
+import Footer from "../components_manager/footer";
+import AddNewMemorial from "../components_manager/addNewMemorial";
+import "../../assets/styles/styleManager/stylePages_manager/memorialsManager.css";
+import { MdOutlineDeleteOutline } from "react-icons/md";
+import { MdOutlineModeEditOutline } from "react-icons/md";
 
-const Memorials_manager = () => {
+const MemorialsManager = () => {
   const [memorials, setMemorials] = useState([]);
+  const [filteredMemorials, setFilteredMemorials] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [editMemorial, setEditMemorial] = useState(null);
   const [showAddForm, setShowAddForm] = useState(false);
   const [newMemorial, setNewMemorial] = useState({
@@ -11,19 +18,33 @@ const Memorials_manager = () => {
     date: "",
     notes: "",
   });
-
+  const fetchMemorials = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/memorials-manager");
+      const data = await response.json();
+      setMemorials(data);
+      setFilteredMemorials(data);
+    } catch (error) {
+      console.error("Error fetching memorials:", error);
+    }
+  };
   useEffect(() => {
-    const fetchMemorials = async () => {
-      try {
-        const response = await fetch("http://localhost:5000/memorials-manager");
-        const data = await response.json();
-        setMemorials(data);
-      } catch (error) {
-        console.error("Error fetching memorials:", error);
-      }
-    };
     fetchMemorials();
   }, []);
+
+  const handleSearch = (event) => {
+    const query = event.target.value.toLowerCase();
+    setSearchQuery(query);
+
+    const filtered = memorials.filter(
+      (memorial) =>
+        memorial.deceased_name.toLowerCase().includes(query) ||
+        memorial.hebrew_date.includes(query) ||
+        memorial.date.includes(query)
+    );
+
+    setFilteredMemorials(filtered);
+  };
 
   const handleSaveChanges = async () => {
     try {
@@ -37,21 +58,20 @@ const Memorials_manager = () => {
           body: JSON.stringify(editMemorial),
         }
       );
-
-      if (!response.ok) {
-        throw new Error(`Error: failed to update memorial with ID ${editMemorial.id}`);
-      }
+      if (!response.ok) throw new Error("Failed to update memorial");
 
       setMemorials((prevMemorials) =>
         prevMemorials.map((memorial) =>
-          memorial.id === editMemorial.id ? { ...memorial, ...editMemorial } : memorial
+          memorial.id === editMemorial.id
+            ? { ...memorial, ...editMemorial }
+            : memorial
         )
       );
       setEditMemorial(null);
+      alert("האזכרה עודכנה בהצלחה!");
     } catch (error) {
       console.error("Error updating memorial:", error);
     }
-    alert("האזכרה עודכנה בהצלחה!");
   };
 
   const handleDeleteClick = async (id) => {
@@ -63,6 +83,9 @@ const Memorials_manager = () => {
         setMemorials((prevMemorials) =>
           prevMemorials.filter((memorial) => memorial.id !== id)
         );
+        setFilteredMemorials((prevMemorials) =>
+          prevMemorials.filter((memorial) => memorial.id !== id)
+        );
       } catch (error) {
         console.error("Error deleting memorial:", error);
       }
@@ -71,131 +94,190 @@ const Memorials_manager = () => {
 
   const handleSaveNewMemorial = async () => {
     try {
-      const response = await fetch("http://localhost:5000/memorials-manager/add", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newMemorial),
-      });
+      const response = await fetch(
+        "http://localhost:5000/memorials-manager/add",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newMemorial),
+        }
+      );
 
       if (!response.ok) throw new Error("Failed to add new memorial");
 
       const data = await response.json();
       setMemorials((prevMemorials) => [...prevMemorials, data]);
+      setFilteredMemorials((prevMemorials) => [...prevMemorials, data]);
       alert("האזכרה החדשה נוספה בהצלחה!");
       setShowAddForm(false);
-      setNewMemorial({ deceased_name: "", hebrew_date: "", date: "", notes: "" });
+      setNewMemorial({
+        deceased_name: "",
+        hebrew_date: "",
+        date: "",
+        notes: "",
+      });
     } catch (error) {
       console.error("Error adding new memorial:", error);
     }
   };
 
+  const handleAddClick = () => setShowAddForm(true);
+
   return (
-    <div dir="rtl">
-      <NavbarManager />
-      <div style={{ height: "150px" }}></div>
-      <div>
-        <h1>לוח אזכרות</h1>
-        <div>
-          <button onClick={() => setShowAddForm(true)}>הוסף נפטר/ת</button>
-        </div>
-      </div>
+    <div className="base-manager">
+      <header>
+        <NavbarManager />
+      </header>
 
-      {showAddForm && (
-        <div className="add-form">
-          <h2>הוסף אזכרה חדשה</h2>
-          <label>שם המנוח:</label>
-          <input
-            value={newMemorial.deceased_name}
-            onChange={(e) => setNewMemorial({ ...newMemorial, deceased_name: e.target.value })}
-          />
-          <label>תאריך עברי:</label>
-          <input
-            value={newMemorial.hebrew_date}
-            onChange={(e) => setNewMemorial({ ...newMemorial, hebrew_date: e.target.value })}
-          />
-          <label>תאריך לועזי:</label>
-          <input
-            value={newMemorial.date}
-            onChange={(e) => setNewMemorial({ ...newMemorial, date: e.target.value })}
-          />
-          <label>הערות:</label>
-          <input
-            value={newMemorial.notes}
-            onChange={(e) => setNewMemorial({ ...newMemorial, notes: e.target.value })}
-          />
-          <button onClick={handleSaveNewMemorial}>שמור אזכרה</button>
-          <button onClick={() => setShowAddForm(false)}>סגור</button>
-        </div>
-      )}
+      <div className="base-manager-container" dir="rtl">
+        <div style={{ height: "100px" }}></div>
 
-      <table>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>שם המנוח</th>
-            <th>תאריך עברי</th>
-            <th>תאריך לועזי</th>
-            <th>הערות</th>
-            <th>ערוך</th>
-            <th>מחק</th>
-          </tr>
-        </thead>
-        <tbody>
-          {memorials.map((memorial, index) => (
-            <tr key={memorial.id}>
-              <td>{index + 1}</td>
-              <td>{memorial.deceased_name}</td>
-              <td>{memorial.hebrew_date}</td>
-              <td>{memorial.date}</td>
-              <td>{memorial.notes}</td>
-              <td>
-                <button onClick={() => setEditMemorial(memorial)}>ערוך</button>
-              </td>
-              <td>
-                <button className="delete-button" onClick={() => handleDeleteClick(memorial.id)}>
-                  מחק
-                </button>
-              </td>
+        <div className="title">
+          <h1>לוח אזכרות</h1>
+          <div className="search-container">
+            <input
+              type="text"
+              placeholder="חפש לפי שם מנוח, תאריך עברי, תאריך לועזי..."
+              value={searchQuery}
+              onChange={handleSearch}
+            />
+          </div>
+          <div className="btn-container">
+            <button className="add-button" onClick={handleAddClick}>
+              הוסף אזכרה חדשה
+            </button>
+          </div>
+        </div>
+
+        {showAddForm && (
+          <AddNewMemorial
+            setShowAddForm={setShowAddForm}
+            handleSaveNewMemorial={handleSaveNewMemorial}
+            newMemorial={newMemorial}
+            setNewMemorial={setNewMemorial}
+            refreshLessons={fetchMemorials}
+          />
+        )}
+
+        <table className="table-container">
+          <thead className="thead">
+            <tr>
+              <th></th>
+              <th>שם המנוח</th>
+              <th>תאריך עברי</th>
+              <th>תאריך לועזי</th>
+              <th>הערות</th>
+              <th>ערוך</th>
+              <th>מחק</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {filteredMemorials.map((memorial, index) => (
+              <tr key={memorial.id}>
+                <td>
+                  <strong>{index + 1}</strong>
+                </td>
+                <td>{memorial.deceased_name}</td>
+                <td>{memorial.hebrew_date}</td>
+                <td>{memorial.date}</td>
+                <td>{memorial.notes}</td>
+                <td>
+                  <button
+                    className="edit-button"
+                    onClick={() => setEditMemorial(memorial)}
+                  >
+                    <MdOutlineModeEditOutline size={16} />
+                  </button>
+                </td>
+                <td>
+                  <button
+                    className="delete-button"
+                    onClick={() => handleDeleteClick(memorial.id)}
+                  >
+                    <MdOutlineDeleteOutline size={16} />
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
-      {editMemorial && (
-        <div className="edit-modal">
-          <h2>עריכת אזכרה</h2>
-          <label>שם המנוח:</label>
-          <input
-            value={editMemorial.deceased_name}
-            onChange={(e) =>
-              setEditMemorial({ ...editMemorial, deceased_name: e.target.value })
-            }
-          />
-          <label>תאריך עברי:</label>
-          <input
-            value={editMemorial.hebrew_date}
-            onChange={(e) =>
-              setEditMemorial({ ...editMemorial, hebrew_date: e.target.value })
-            }
-          />
-          <label>תאריך לועזי:</label>
-          <input
-            value={editMemorial.date}
-            onChange={(e) => setEditMemorial({ ...editMemorial, date: e.target.value })}
-          />
-          <label>הערות:</label>
-          <input
-            value={editMemorial.notes}
-            onChange={(e) => setEditMemorial({ ...editMemorial, notes: e.target.value })}
-          />
-          <button onClick={handleSaveChanges}>שמור שינויים</button>
-          <button onClick={() => setEditMemorial(null)}>סגור</button>
-        </div>
-      )}
+        {editMemorial && (
+          <div>
+            <div
+              className="overlay"
+              onClick={() => setEditMemorial(null)}
+            ></div>
+            <div className="edit-modal">
+              <h2>עריכת אזכרה</h2>
+              <form className="form-grid">
+                <div>
+                  <label>שם המנוח:</label>
+                  <input
+                    value={editMemorial.deceased_name}
+                    onChange={(e) =>
+                      setEditMemorial({
+                        ...editMemorial,
+                        deceased_name: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <div>
+                  <label>תאריך עברי:</label>
+                  <input
+                    value={editMemorial.hebrew_date}
+                    onChange={(e) =>
+                      setEditMemorial({
+                        ...editMemorial,
+                        hebrew_date: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <div>
+                  <label>תאריך לועזי:</label>
+                  <input
+                    value={editMemorial.date}
+                    onChange={(e) =>
+                      setEditMemorial({
+                        ...editMemorial,
+                        date: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <div>
+                  <label>הערות:</label>
+                  <input
+                    value={editMemorial.notes}
+                    onChange={(e) =>
+                      setEditMemorial({
+                        ...editMemorial,
+                        notes: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <div className="form-actions">
+                  <button type="button" onClick={handleSaveChanges}>
+                    שמור שינויים
+                  </button>
+                  <button type="button" onClick={() => setEditMemorial(null)}>
+                    סגור
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+        <div style={{ height: "50px" }}></div>
+        <Footer />
+      </div>
     </div>
   );
 };
 
-export default Memorials_manager;
+export default MemorialsManager;

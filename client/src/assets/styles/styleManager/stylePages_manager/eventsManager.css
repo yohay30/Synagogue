@@ -1,210 +1,226 @@
-/* assets/styles/styleManager/stylePages_manager/friendsManager.css */
+/* משתנים כלליים */
+:root {
+  --main-bg-color: #f4f4f7;
+  --button-bg-color: #4caf50;
+  --button-hover-bg-color: #45a049;
+  --edit-button-bg-color: #0071e3;
+  --edit-button-hover-bg-color: #2390fc;
+  --delete-button-bg-color: #b2362d;
+  --delete-button-hover-bg-color: #e53935;
+  --text-color: #333;
+  --box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
 
 /* Container for the page content */
 .base-manager-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #f4f4f7;
-    border-radius: 10px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: var(--main-bg-color);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  box-sizing: border-box;
+  box-shadow: var(--box-shadow);
 }
 
 /* Title section */
 .title {
-    display: flex;
-    justify-content: space-between; /* Align title and button to opposite sides */
-    align-items: center;
-    margin-bottom: 30px;
-    color: #333;
-    font-size: 1.4rem;
-    font-weight: 600;
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  color: var(--text-color);
+  font-size: 1.4rem;
+  font-weight: 600;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: var(--box-shadow);
 }
 
 .title h1 {
-    text-align: right; /* Move the title to the right */
-    flex-grow: 1;
+  text-align: right;
+  flex-grow: 1;
 }
 
-/* Add button for new friend */
-.add-button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 12px;
-    font-size: 1rem;
-    border: none;
-    border-radius: 25px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+/* כפתורים כלליים */
+.button {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 30px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  color: white;
 }
 
-.add-button:hover {
-    background-color: #45a049;
+.button.add {
+  background-color: var(--button-bg-color);
+}
+
+.button.add:hover {
+  background-color: var(--button-hover-bg-color);
+}
+
+.button.edit {
+  background-color: var(--edit-button-bg-color);
+}
+
+.button.edit:hover {
+  background-color: var(--edit-button-hover-bg-color);
+}
+
+.button.delete {
+  background-color: var(--delete-button-bg-color);
+}
+
+.button.delete:hover {
+  background-color: var(--delete-button-hover-bg-color);
 }
 
 /* Search container */
 .search-container {
-    padding-left: 10px ;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    width: 30%; /* Adjust the width of the search field */
-    /* margin-top: 10px; */
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 30%;
 }
 
 .search-container input {
-    width: 100%;
-    padding: 12px;
-    font-size: 1rem;
-    border-radius: 25px;
-    border: 2px solid #ccc;
-    outline: none;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  border-radius: 25px;
+  border: 2px solid #ccc;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .search-container input:focus {
-    border-color: #4CAF50;
-    box-shadow: 0 0 8px rgba(72, 160, 107, 0.2);
+  border-color: var(--button-bg-color);
+  box-shadow: 0 0 8px rgba(72, 160, 107, 0.2);
 }
 
-/* Table container */
-.table-container {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 30px;
-    background-color: white;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+/* טבלאות */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 30px;
+  background-color: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: var(--box-shadow);
 }
 
-/* Table rows and columns */
-.table-container th,
-.table-container td {
-    padding: 20px;
-    text-align: center;
-    font-size: 1rem;
-    color: #333;
+.table th,
+.table td {
+  padding: 20px;
+  text-align: center;
+  font-size: 1rem;
+  color: var(--text-color);
 }
 
-.table-container th {
-    background-color: #f5f5f7;
-    color: #555;
+.table th {
+  background-color: #f5f5f7;
 }
 
-.table-container td {
-    border-bottom: 1px solid #ddd;
+.table td {
+  border-bottom: 1px solid #ddd;
 }
 
-.table-container tr:hover {
-    background-color: #f1f1f1;
-    cursor: pointer;
+.table tr:hover {
+  background-color: #f1f1f1;
+  cursor: pointer;
 }
 
-/* Edit and delete buttons */
-.edit-button,
-.delete-button {
-    background-color: #0071e3;
-    color: white;
-    padding: 8px 15px;
-    border: none;
-    border-radius: 30px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.edit-button:hover {
-    background-color: #2390fc;
-}
-
-.delete-button {
-    background-color: #b2362d;
-
-}
-
-.delete-button:hover {
-    color: #ffffff;
-    background-color: #e53935;
-}
-
-/* Modal overlay */
+/* Overlay */
 .overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.3);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-/* Edit Form */
-.edit-form {
-    position: fixed;
-    top: 25%;
-    left: 25%;
-    width: 50%;
-    background-color: white;
-    padding: 30px;
-    border-radius: 20px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    z-index: 100;
+/* תיבת עריכה */
+.edit-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: var(--box-shadow);
+  z-index: 1000;
+  max-width: 60%;
+  width: 90%;
+  font-family: Arial, sans-serif;
+  
 }
 
-.edit-form label {
-    display: block;
-    margin-bottom: 10px;
-    color: #444;
+.edit-modal h2 {
+  text-align: center;
+  margin-bottom: 20px;
 }
 
-.edit-form input {
-    width: 100%;
-    padding: 12px;
-    margin-bottom: 20px;
-    border-radius: 25px;
-    border: 2px solid #ccc;
-    font-size: 1rem;
-    outline: none;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+/* רשת טופס */
+.grid {
+  display: grid;
+  gap: 20px;
 }
 
-.edit-form input:focus {
-    border-color: #4CAF50;
-    box-shadow: 0 0 8px rgba(72, 160, 107, 0.2);
+.grid label {
+  font-size: 1rem;
+  font-weight: bold;
+  color: var(--text-color);
 }
 
-.edit-form button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 30px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+.grid input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  width: 100%;
 }
 
-.edit-form button:hover {
-    background-color: #45a049;
+.grid input:focus {
+  border-color: var(--button-bg-color);
+  box-shadow: 0 0 8px rgba(72, 160, 107, 0.2);
 }
-.footer{
 
-    
-    display: flex;
-    justify-content: space-between; /* Align title and button to opposite sides */
-    align-items: center;
-    margin-bottom: 30px;
-    color: #333;
-    font-size: 1.4rem;
-    font-weight: 600;
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); 
-    
+/* כפתורי טופס */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.form-actions .button:first-child {
+  background-color: var(--button-bg-color);
+}
+
+.form-actions .button:first-child:hover {
+  background-color: var(--button-hover-bg-color);
+}
+
+.form-actions .button:last-child {
+  background-color: var(--delete-button-bg-color);
+}
+
+.form-actions .button:last-child:hover {
+  background-color: var(--delete-button-hover-bg-color);
+}
+input::placeholder {
+  font-style: italic; /* כתב נטוי */
+  color: gray; /* צבע אפור */
+  font-size: 14px; /* גודל טקסט */
 }

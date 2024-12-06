@@ -5,7 +5,7 @@ const NavbarManager = () => {
   return (
     <nav className="navbar_manager" dir="rtl">
       <h1 style={{ fontSize: "30px", color: "white" }}>
-        {localStorage.getItem("username")} ברוך הבא
+        {/* {localStorage.getItem("username")} ברוך הבא */}
       </h1>
       <Link to="/home-manager">ראשי</Link>
       <Link to="/main-board">לוח תצוגה </Link>

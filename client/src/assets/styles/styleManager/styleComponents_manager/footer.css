@@ -1,0 +1,13 @@
+.footer {
+    display: flex;
+    justify-content: space-between; /* Align title and button to opposite sides */
+    align-items: center;
+    color: #333;
+    font-size: 1rem;
+    font-weight: 600;
+    background-color: #e16060;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin-top: auto; /* Push footer to the bottom */
+}

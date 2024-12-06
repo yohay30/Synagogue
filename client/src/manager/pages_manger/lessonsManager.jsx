@@ -1,8 +1,15 @@
 import React, { useEffect, useState } from "react";
 import NavbarManager from "../components_manager/navbarManager";
+import Footer from "../components_manager/footer";
+import AddNewLesson from "../components_manager/addNewLesson";
+import "../../assets/styles/styleManager/stylePages_manager/lessonsManager.css";
+import { MdOutlineDeleteOutline } from "react-icons/md";
+import { MdOutlineModeEditOutline } from "react-icons/md";
 
 export default function Lessons_manager() {
   const [lessons, setLessons] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredLessons, setFilteredLessons] = useState([]);
   const [editLesson, setEditLesson] = useState(null);
   const [showAddForm, setShowAddForm] = useState(false);
   const [newLesson, setNewLesson] = useState({
@@ -12,21 +19,60 @@ export default function Lessons_manager() {
     lesson_time: "",
     location: "",
   });
+  const daysOfWeekOrder = [
+    "ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת"
+  ];
+  const sortedLessons = [...lessons].sort((a, b) => {
+    const dayA = daysOfWeekOrder.indexOf(a.day_of_week);
+    const dayB = daysOfWeekOrder.indexOf(b.day_of_week);
+    return dayA - dayB;
+  });
+    
 
+  const fetchLessons = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/lessons-manager");
+      const data = await response.json();
+      setLessons(data);
+      setFilteredLessons(data); // הצגת כל השיעורים מידית
+    } catch (error) {
+      console.error("Error fetching lessons:", error);
+    }
+  };
   useEffect(() => {
-    const fetchLessons = async () => {
-      try {
-        const response = await fetch("http://localhost:5000/lessons-manager");
-        const data = await response.json();
-        setLessons(data);
-      } catch (error) {
-        console.error("Error fetching lessons:", error);
-      }
-    };
-
     fetchLessons();
   }, []);
+  
+  useEffect(() => {
+    if (!searchQuery) {
+      setFilteredLessons(lessons);
+    }
+  }, [searchQuery, lessons]);
+  
+  useEffect(() => {
+    // מיון השיעורים לפי סדר הימים
+    const sortedLessons = [...lessons].sort((a, b) => {
+      const dayA = daysOfWeekOrder.indexOf(a.day_of_week);
+      const dayB = daysOfWeekOrder.indexOf(b.day_of_week);
+      return dayA - dayB;
+    });
+    setFilteredLessons(sortedLessons);
+  }, [lessons]);
+  
+  const handleSearch = (event) => {
+    const query = event.target.value.toLowerCase();
 
+    setSearchQuery(query);
+    const filtered = lessons.filter(
+      (lesson) =>
+        lesson.rabbi_name.toLowerCase().includes(query) ||
+        lesson.topic.toLowerCase().includes(query) ||
+        lesson.day_of_week.toLowerCase().includes(query) ||
+        lesson.lesson_time.toLowerCase().includes(query) ||
+        lesson.location.toLowerCase().includes(query)
+    );
+    setFilteredLessons(filtered);
+  };
   const handleSaveChanges = async () => {
     try {
       const response = await fetch(
@@ -41,7 +87,9 @@ export default function Lessons_manager() {
       );
 
       if (!response.ok) {
-        throw new Error(`Error: failed to update lesson with ID ${editLesson.id}`);
+        throw new Error(
+          `Error: failed to update lesson with ID ${editLesson.id}`
+        );
       }
 
       setLessons((prevLessons) =>
@@ -103,142 +151,176 @@ export default function Lessons_manager() {
   };
 
   return (
-    <div dir="rtl">
-      <NavbarManager />
-      <div>
-        <div style={{ height: "150px" }}></div>
-        <div>
+    <div className="base-manager">
+      <header>
+        <NavbarManager />
+      </header>
+      <div className="base-manager-container" dir="rtl">
+        <div style={{ height: "100px" }}></div>
+
+        <div className="title">
           <h1> לוח שיעורים שבועי </h1>
-          <div>
-            <button onClick={() => setShowAddForm(true)}>הוסף שיעור</button>
+          <div className="search-container">
+            <input
+              type="text"
+              placeholder="חפש לפי שם הרב, יום ,נושא ,מיקום, שעה..."
+              value={searchQuery}
+              onChange={handleSearch}
+            />
+          </div>
+          <div className="btn-container">
+            <button className="add-button" onClick={() => setShowAddForm(true)}>
+              הוסף שיעור
+            </button>
           </div>
         </div>
 
         {showAddForm && (
-          <div className="add-form">
-            <h2>הוסף שיעור חדש</h2>
-            <label>שם הרב:</label>
-            <input
-              value={newLesson.rabbi_name}
-              onChange={(e) =>
-                setNewLesson({ ...newLesson, rabbi_name: e.target.value })
-              }
+          <>
+            <div style={{ height: "30px" }}></div>
+            <AddNewLesson
+              newLesson={newLesson}
+              setNewLesson={setNewLesson}
+              setShowAddForm={setShowAddForm}
+              handleSaveNewLesson={handleSaveNewLesson}
+              refreshLessons={fetchLessons}
             />
-            <label>נושא השיעור:</label>
-            <input
-              value={newLesson.topic}
-              onChange={(e) =>
-                setNewLesson({ ...newLesson, topic: e.target.value })
-              }
-            />
-            <label>יום בשבוע:</label>
-            <input
-              value={newLesson.day_of_week}
-              onChange={(e) =>
-                setNewLesson({ ...newLesson, day_of_week: e.target.value })
-              }
-            />
-            <label>שעה:</label>
-            <input
-              value={newLesson.lesson_time}
-              onChange={(e) =>
-                setNewLesson({ ...newLesson, lesson_time: e.target.value })
-              }
-            />
-            <label>מיקום:</label>
-            <input
-              value={newLesson.location}
-              onChange={(e) =>
-                setNewLesson({ ...newLesson, location: e.target.value })
-              }
-            />
-            <button onClick={handleSaveNewLesson}>שמור שיעור</button>
-            <button onClick={() => setShowAddForm(false)}>סגור</button>
-          </div>
+            <div style={{ height: "30px" }}></div>
+          </>
         )}
 
-        <table>
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>שם הרב</th>
-              <th>נושא השיעור</th>
-              <th>יום</th>
-              <th>שעה</th>
-              <th>מיקום</th>
-              <th>מס משתתפים</th>
-              <th>ערוך</th>
-              <th>מחק</th>
-            </tr>
-          </thead>
-          <tbody>
-            {lessons.map((lesson, index) => (
-              <tr key={lesson.id}>
-                <td>{index + 1}</td>
-                <td>{lesson.rabbi_name}</td>
-                <td>{lesson.topic}</td>
-                <td>{lesson.day_of_week}</td>
-                <td>{lesson.lesson_time}</td>
-                <td>{lesson.location}</td>
-                <td>{lesson.Participants}</td>
-                <td>
-                  <button onClick={() => setEditLesson(lesson)}>ערוך</button>
-                </td>
-                <td>
-                  <button
-                    className="delete-button"
-                    onClick={() => handleDeleteClick(lesson.id)}
-                  >
-                    מחק
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+<table className="table-container">
+  <thead className="thead">
+    <tr>
+      <th></th>
+      <th>יום</th>
+      <th>שם הרב</th>
+      <th>נושא השיעור</th>
+      <th>שעה</th>
+      <th>מיקום</th>
+      <th>מס משתתפים</th>
+      <th>ערוך</th>
+      <th>מחק</th>
+    </tr>
+  </thead>
+  <tbody>
+    {filteredLessons.map((lesson, index) => (
+      <tr key={lesson.id}>
+        <td>
+          <strong>{index + 1}</strong>
+        </td>
+        <td>{lesson.day_of_week}</td>
+        <td>{lesson.rabbi_name}</td>
+        <td>{lesson.topic}</td>
+        <td>{lesson.lesson_time}</td>
+        <td>{lesson.location}</td>
+        <td>{lesson.Participants}</td>
+        <td>
+          <button
+            className="edit-button"
+            onClick={() => setEditLesson(lesson)}
+          >
+            <MdOutlineModeEditOutline size={16} />
+          </button>
+        </td>
+        <td>
+          <button
+            className="delete-button"
+            onClick={() => handleDeleteClick(lesson.id)}
+          >
+            <MdOutlineDeleteOutline size={16} />
+          </button>
+        </td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
 
         {editLesson && (
-          <div className="edit-modal">
-            <h2>עריכת שיעור</h2>
-            <label>שם הרב:</label>
-            <input
-              value={editLesson.rabbi_name}
-              onChange={(e) =>
-                setEditLesson({ ...editLesson, rabbi_name: e.target.value })
-              }
-            />
-            <label>נושא השיעור:</label>
-            <input
-              value={editLesson.topic}
-              onChange={(e) =>
-                setEditLesson({ ...editLesson, topic: e.target.value })
-              }
-            />
-            <label>יום בשבוע:</label>
-            <input
-              value={editLesson.day_of_week}
-              onChange={(e) =>
-                setEditLesson({ ...editLesson, day_of_week: e.target.value })
-              }
-            />
-            <label>שעה:</label>
-            <input
-              value={editLesson.lesson_time}
-              onChange={(e) =>
-                setEditLesson({ ...editLesson, lesson_time: e.target.value })
-              }
-            />
-            <label>מיקום:</label>
-            <input
-              value={editLesson.location}
-              onChange={(e) =>
-                setEditLesson({ ...editLesson, location: e.target.value })
-              }
-            />
-            <button onClick={handleSaveChanges}>שמור שינויים</button>
-            <button onClick={() => setEditLesson(null)}>סגור</button>
-          </div>
+          <>
+            {editLesson && (
+              <>
+                <div
+                  className="overlay"
+                  onClick={() => setEditLesson(null)}
+                ></div>
+                <div className="edit-modal">
+                  <h2>עריכת שיעור</h2>
+                  <form className="form-grid">
+                    <div>
+                      <label>שם הרב:</label>
+                      <input
+                        value={editLesson.rabbi_name}
+                        onChange={(e) =>
+                          setEditLesson({
+                            ...editLesson,
+                            rabbi_name: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label>נושא השיעור:</label>
+                      <input
+                        value={editLesson.topic}
+                        onChange={(e) =>
+                          setEditLesson({
+                            ...editLesson,
+                            topic: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label>יום בשבוע:</label>
+                      <input
+                        value={editLesson.day_of_week}
+                        onChange={(e) =>
+                          setEditLesson({
+                            ...editLesson,
+                            day_of_week: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label>שעה:</label>
+                      <input
+                        value={editLesson.lesson_time}
+                        onChange={(e) =>
+                          setEditLesson({
+                            ...editLesson,
+                            lesson_time: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label>מיקום:</label>
+                      <input
+                        value={editLesson.location}
+                        onChange={(e) =>
+                          setEditLesson({
+                            ...editLesson,
+                            location: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div className="form-actions">
+                      <button type="button" onClick={handleSaveChanges}>שמור שינויים</button>
+                      <button type="button" onClick={() => setEditLesson(null)}>סגור</button>
+                    </div>
+                  </form>
+                </div>
+              </>
+            )}
+          </>
         )}
+
+        <div style={{ height: "50px" }}></div>
+        <Footer className="footer" />
       </div>
     </div>
   );

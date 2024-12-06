@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import NavbarManager from "../components_manager/navbarManager";
+import AddNewPrayer from "../components_manager/addNewPrayer"
 import "../../assets/styles/styleManager/stylePages_manager/prayersManager.css";
-import AddNewPrayer from "../components_manager/addNewprayers";
+import Footer from "../components_manager/footer";
+import { MdOutlineDeleteOutline } from "react-icons/md";
+import { MdOutlineModeEditOutline } from "react-icons/md";
 
 const PrayersManager = () => {
   const [prayers, setPrayers] = useState([]);
@@ -63,22 +66,11 @@ const PrayersManager = () => {
 
   const renderPrayerTable = (dayType, prayerTypes) => (
     <table className="table-container">
-      <thead className="thead">
-        <tr>
-          <th></th>
-          <th>סוג תפילה</th>
-          <th>שעת תפילה</th>
-          <th>מיקום תפילה</th>
-          <th>תיאור</th>
-          <th>ערוך</th>
-          <th>מחק</th>
-        </tr>
-      </thead>
       <tbody>
         {prayerTypes.map((prayerType) => (
           <>
             <tr className="table-section-header">
-              <td colSpan="9">
+              <td colSpan="1">
                 <strong className="section-header">{prayerType}</strong>
               </td>
             </tr>
@@ -88,12 +80,16 @@ const PrayersManager = () => {
                   prayer.Day_Type === dayType &&
                   prayer.Prayer_Type === prayerType
               )
+              .sort((a, b) => {
+                const [hoursA, minutesA] = a.Time.split(":").map(Number);
+                const [hoursB, minutesB] = b.Time.split(":").map(Number);
+                return hoursA - hoursB || minutesA - minutesB;
+              })
               .map((prayer, index) => (
                 <tr key={index} className="table-row">
-                   <td>
-                  <strong>{index + 1}</strong>
-                </td>
-                  <td>{prayer.Prayer_Type}</td>
+                  <td>
+                    <strong>{index + 1}</strong>
+                  </td>
                   <td>{prayer.Time}</td>
                   <td>{prayer.Location}</td>
                   <td>{prayer.Description}</td>
@@ -102,7 +98,7 @@ const PrayersManager = () => {
                       className="edit-button"
                       onClick={() => handleEditClick(prayer)}
                     >
-                      ערוך
+                      <MdOutlineModeEditOutline size={16} />
                     </button>
                   </td>
                   <td>
@@ -110,7 +106,7 @@ const PrayersManager = () => {
                       className="delete-button"
                       onClick={() => handleDeleteClick(prayer.id)}
                     >
-                      מחק
+                      <MdOutlineDeleteOutline size={16} />
                     </button>
                   </td>
                 </tr>
@@ -131,87 +127,135 @@ const PrayersManager = () => {
         <div style={{ height: "100px" }}></div>
 
         <div className="title">
-          <h1>תפילות </h1>
-          
+          <strong>
+            <h1>תפילות</h1>
+          </strong>
+          <button className="add-button" onClick={() => setShowAddForm(true)}>
+            הוסף תפילה
+          </button>
+        </div>
+        <div>
+          {showAddForm && (
+            <>
+              <div style={{ height: "30px" }}></div>
+              <AddNewPrayer
+                setShowAddForm={setShowAddForm}
+                refreshPrayers={fetchPrayers}
+              />
+              <div style={{ height: "30px" }}></div>
+            </>
+          )}
         </div>
 
-        <h2 className="title"> חול 
-          <button className="add-button" onClick={() => setShowAddForm(true)}>
-              הוסף תפילה
-            </button></h2>
+        <h2 className="title-header"> חול</h2>
         {renderPrayerTable("חול", ["שחרית", "מנחה", "ערבית"])}
         <div style={{ height: "50px" }}></div>
 
-        <h2 className="title"> שבת 
-        <button className="add-button" onClick={() => setShowAddForm(true)}>
-              הוסף תפילה
-            </button>
-        </h2>
+        <h2 className="title-header"> שבת</h2>
         {renderPrayerTable("שבת", ["שחרית", "מנחה", "ערבית"])}
         <div style={{ height: "50px" }}></div>
 
-        <h2 className="title">חג <button className="add-button" onClick={() => setShowAddForm(true)}>
-              הוסף תפילה
-            </button></h2>
-        
+        <h2 className="title-header">חג </h2>
+
         {renderPrayerTable("חג", ["שחרית", "מנחה", "ערבית"])}
-        {showAddForm && (
-          <AddNewPrayer
-            setShowAddForm={setShowAddForm}
-            refreshPrayers={fetchPrayers}
-          />
-        )}
 
         {editPrayer && (
-          <div>
-            <h2>עריכת תפילה</h2>
-            <div>
-              <label>סוג תפילה:</label>
-              <input
-                value={editPrayer.Prayer_Type}
-                onChange={(e) =>
-                  setEditPrayer({ ...editPrayer, Prayer_Type: e.target.value })
-                }
-              />
-              <label>שעת תפילה:</label>
-              <input
-                value={editPrayer.Time}
-                onChange={(e) =>
-                  setEditPrayer({ ...editPrayer, Time: e.target.value })
-                }
-              />
-              <label>תאריך תפילה:</label>
-              <input
-                value={editPrayer.Prayer_Date}
-                onChange={(e) =>
-                  setEditPrayer({ ...editPrayer, Prayer_Date: e.target.value })
-                }
-              />
-              <label>מיקום תפילה:</label>
-              <input
-                value={editPrayer.Location}
-                onChange={(e) =>
-                  setEditPrayer({ ...editPrayer, Location: e.target.value })
-                }
-              />
-              <label>תאריך עברי:</label>
-              <input
-                value={editPrayer.Hebrew_Date}
-                onChange={(e) =>
-                  setEditPrayer({ ...editPrayer, Hebrew_Date: e.target.value })
-                }
-              />
-              <label>תיאור:</label>
-              <input
-                value={editPrayer.Description}
-                onChange={(e) =>
-                  setEditPrayer({ ...editPrayer, Description: e.target.value })
-                }
-              />
-              <button onClick={handleSaveChanges}>שמור שינויים</button>
+          <>
+            <div className="overlay" onClick={() => setEditPrayer(null)}></div>
+            <div className="edit-modal">
+              <h2>עריכת תפילה</h2>
+              <form className="form-grid">
+                <div>
+                  <label>סוג תפילה:</label>
+                  <select
+                    className="select"
+                    value={editPrayer.Prayer_Type}
+                    onChange={(e) => {
+                      setEditPrayer({
+                        ...editPrayer,
+                        Prayer_Type: e.target.value,
+                      });
+                    }}
+                  >
+                    <option value="חול">חול</option>
+                    <option value="שבת">שבת</option>
+                    <option value="חג">חג</option>
+                    <option value="צום">צום</option>
+                    <option value="חול המועד">חול המועד</option>
+                    <option value="חנוכה">חנוכה</option>
+                    <option value="פורים">פורים</option>
+                  </select>
+                </div>
+                <div>
+                  <label>שעת תפילה:</label>
+                  <input
+                    value={editPrayer.Time}
+                    onChange={(e) =>
+                      setEditPrayer({ ...editPrayer, Time: e.target.value })
+                    }
+                  />
+                </div>
+                <div>
+                  <label>תאריך תפילה:</label>
+                  <input
+                    value={editPrayer.Prayer_Date}
+                    onChange={(e) =>
+                      setEditPrayer({
+                        ...editPrayer,
+                        Prayer_Date: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <div>
+                  <label>מיקום תפילה:</label>
+                  <input
+                    value={editPrayer.Location}
+                    onChange={(e) =>
+                      setEditPrayer({ ...editPrayer, Location: e.target.value })
+                    }
+                  />
+                </div>
+                <div>
+                  <label>תאריך עברי:</label>
+                  <input
+                    value={editPrayer.Hebrew_Date}
+                    onChange={(e) =>
+                      setEditPrayer({
+                        ...editPrayer,
+                        Hebrew_Date: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <div>
+                  <label>תיאור:</label>
+                  <input
+                    value={editPrayer.Description}
+                    onChange={(e) =>
+                      setEditPrayer({
+                        ...editPrayer,
+                        Description: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+
+                <div className="form-actions">
+                  <button type="button" onClick={handleSaveChanges}>
+                    שמור שינויים
+                  </button>
+                  <button type="button" onClick={() => setEditPrayer(null)}>
+                    ביטול
+                  </button>
+                </div>
+              </form>
             </div>
-          </div>
+          </>
         )}
+
+        <div style={{ height: "50px" }}></div>
+        <Footer className="footer" />
       </div>
     </div>
   );

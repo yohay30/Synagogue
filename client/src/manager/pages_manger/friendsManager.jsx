@@ -3,6 +3,9 @@
 import React, { useEffect, useState } from "react";
 import AddNewFriend from "../components_manager/addNewFriend";
 import NavbarManager from "../components_manager/navbarManager";
+import Footer from "../components_manager/footer";
+import { MdOutlineDeleteOutline } from "react-icons/md";
+import { MdOutlineModeEditOutline } from "react-icons/md";
 import "../../assets/styles/styleManager/stylePages_manager/friendsManager.css";
 
 const FriendsManager = () => {
@@ -41,12 +44,14 @@ const FriendsManager = () => {
   const handleSearch = (event) => {
     const query = event.target.value.toLowerCase();
     setSearchQuery(query);
+
     const filtered = members.filter(
       (member) =>
         member.first_name.toLowerCase().includes(query) ||
         member.last_name.toLowerCase().includes(query) ||
         member.phone.includes(query)
     );
+
     setFilteredMembers(filtered);
   };
 
@@ -146,7 +151,7 @@ const FriendsManager = () => {
           <div className="search-container">
             <input
               type="text"
-              placeholder="חפש לפי שם, משפחה, או פלאפון"
+              placeholder="חפש לפי שם פרטי, משפחה או פלאפון..."
               value={searchQuery}
               onChange={handleSearch}
             />
@@ -170,8 +175,8 @@ const FriendsManager = () => {
         <table className="table-container">
           <thead className="thead">
             <tr>
-              <th>#</th>
-              <th>שם פרטי</th>
+              <th></th>
+              <th rowSpan="2">שם פרטי</th>
               <th>שם משפחה</th>
               <th>טלפון</th>
               <th>אימייל</th>
@@ -200,7 +205,7 @@ const FriendsManager = () => {
                     className="edit-button"
                     onClick={() => handleEditClick(member)}
                   >
-                    ערוך
+                    <MdOutlineModeEditOutline size={16} />
                   </button>
                 </td>
                 <td>
@@ -208,7 +213,7 @@ const FriendsManager = () => {
                     className="delete-button"
                     onClick={() => handleDeleteClick(member.id)}
                   >
-                    מחק
+                    <MdOutlineDeleteOutline size={16} />
                   </button>
                 </td>
               </tr>
@@ -218,72 +223,140 @@ const FriendsManager = () => {
 
         {editMember && (
           <>
-            <div className="overlay" onClick={() => setEditMember(null)}></div>
-            <div className="edit-form">
-              <h2>עריכה</h2>
-              <label>שם פרטי:</label>
-              <input
-                value={editMember.first_name}
-                onChange={(e) =>
-                  setEditMember({ ...editMember, first_name: e.target.value })
-                }
-              />
-              <label>שם משפחה:</label>
-              <input
-                value={editMember.last_name}
-                onChange={(e) =>
-                  setEditMember({ ...editMember, last_name: e.target.value })
-                }
-              />
-              <label>טלפון:</label>
-              <input
-                value={editMember.phone}
-                onChange={(e) =>
-                  setEditMember({ ...editMember, phone: e.target.value })
-                }
-              />
-              <label>אימייל:</label>
-              <input
-                value={editMember.email}
-                onChange={(e) =>
-                  setEditMember({ ...editMember, email: e.target.value })
-                }
-              />
-              <label>כתובת:</label>
-              <input
-                value={editMember.address}
-                onChange={(e) =>
-                  setEditMember({ ...editMember, address: e.target.value })
-                }
-              />
-              <label>כיסא מספר:</label>
-              <input
-                value={editMember?.chair_number || ""}
-                onChange={(e) =>
-                  setEditMember({ ...editMember, chair_number: e.target.value })
-                }
-              />
-              <label>מנהל:</label>
-              <input
-                type="checkbox"
-                checked={editMember.is_admin === 1}
-                onChange={(e) =>
-                  setEditMember({
-                    ...editMember,
-                    is_admin: e.target.checked ? 1 : 0,
-                  })
-                }
-              />
-              <button onClick={handleSaveChanges}>שמור שינויים</button>
-              <button onClick={() => setEditMember(null)}>סגור</button>
-            </div>
+            {editMember && (
+              <>
+                <div className="overlay" onClick={() => setEditMember(null)}>
+                </div>
+                <div className="edit-modal">
+                  <h2>עריכת חבר</h2>
+                  <form className="form-grid">
+                    <div>
+                      <label>שם פרטי:</label>
+                      <input
+                        value={editMember.first_name}
+                        onChange={(e) =>
+                          setEditMember({
+                            ...editMember,
+                            first_name: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label>שם משפחה:</label>
+                      <input
+                        value={editMember.last_name}
+                        onChange={(e) =>
+                          setEditMember({
+                            ...editMember,
+                            last_name: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label>טלפון:</label>
+                      <input
+                        value={editMember.phone}
+                        onChange={(e) =>
+                          setEditMember({
+                            ...editMember,
+                            phone: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label>אימייל:</label>
+                      <input
+                        value={editMember.email}
+                        onChange={(e) =>
+                          setEditMember({
+                            ...editMember,
+                            email: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label>כתובת:</label>
+                      <input
+                        value={editMember.address}
+                        onChange={(e) =>
+                          setEditMember({
+                            ...editMember,
+                            address: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label>מספר זהות:</label>
+                      <input
+                        value={editMember.id_number}
+                        onChange={(e) =>
+                          setEditMember({
+                            ...editMember,
+                            id_number: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label>סיסמה:</label>
+                      <input
+                        value={editMember.password}
+                        onChange={(e) =>
+                          setEditMember({
+                            ...editMember,
+                            password: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+
+                    <div>
+                      <label>כיסא מספר:</label>
+                      <input
+                        value={editMember?.chair_number || ""}
+                        onChange={(e) =>
+                          setEditMember({
+                            ...editMember,
+                            chair_number: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label>מנהל:</label>
+                      <input
+                        type="checkbox"
+                        checked={editMember.is_admin === 1}
+                        onChange={(e) =>
+                          setEditMember({
+                            ...editMember,
+                            is_admin: e.target.checked ? 1 : 0,
+                          })
+                        }
+                      />
+                    </div>
+                    <div className="form-actions">
+                      <button type="button" onClick={handleSaveChanges}>
+                        שמור שינויים
+                      </button>
+                      <button type="button" onClick={() => setEditMember(null)}>
+                        ביטול
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </>
+            )}
           </>
         )}
-        <div style={{ height: "100px" }}></div>
 
-        <footer className="footer">
-          <p>&copy; 2023 Synagogue Management System. All rights reserved.</p>
-        </footer>
+        <div style={{ height: "50px" }}></div>
+        <Footer className="footer" />
       </div>
     </div>
   );

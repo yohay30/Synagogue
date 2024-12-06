@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
 import NavbarManager from "../components_manager/navbarManager";
+import AddNewMassage from "../components_manager/addNewMassage.jsx";
+import Footer from "../components_manager/footer";
+import "../../assets/styles/styleManager/stylePages_manager/massagesManager.css";
+import { MdOutlineDeleteOutline } from "react-icons/md";
+import { MdOutlineModeEditOutline } from "react-icons/md";
 
 const MassagesManager = () => {
   const [messages, setMessages] = useState([]);
@@ -11,19 +16,17 @@ const MassagesManager = () => {
     type: "כללי",
     sender: "",
   });
-
+  const fetchMessages = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/massages-manager");
+      if (!response.ok) throw new Error("Network response was not ok");
+      const data = await response.json();
+      setMessages(data);
+    } catch (error) {
+      console.error("Error fetching messages:", error);
+    }
+  };
   useEffect(() => {
-    const fetchMessages = async () => {
-      try {
-        const response = await fetch("http://localhost:5000/massages-manager");
-        if (!response.ok) throw new Error("Network response was not ok");
-        const data = await response.json();
-        setMessages(data);
-      } catch (error) {
-        console.error("Error fetching messages:", error);
-      }
-    };
-
     fetchMessages();
   }, []);
 
@@ -98,65 +101,53 @@ const MassagesManager = () => {
     }
   };
 
+  const formatDate = (message) => {
+    const date = new Date(message.created_at);
+    const formattedDate = `${date.getDate()} ${date.toLocaleString("he-IL", {
+      month: "long",
+    })} ${date.getFullYear()} ,  ${date
+      .getHours()
+      .toString()
+      .padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}`;
+
+    return formattedDate;
+  };
   return (
-    <div>
-      <NavbarManager />
-      <div className="massages_manager" dir="rtl">
-        <div style={{ height: "150px" }}></div>
+    <div className="base-manager">
+      <header>
+        <NavbarManager />
+      </header>
+      <div className="base-manager-container" dir="rtl">
+        <div style={{ height: "100px" }}></div>
         <div className="title">
           <h1>לוח הודעות</h1>
           <div className="btn-container">
-            <button onClick={() => setShowAddForm(true)}>הוסף הודעה</button>
+            <button className="add-button" onClick={() => setShowAddForm(true)}>
+              הוסף הודעה
+            </button>
           </div>
         </div>
-
         {showAddForm && (
-          <div className="add-form">
-            <h2>הוסף הודעה חדשה</h2>
-            <label>כותרת:</label>
-            <input
-              value={newMessage.title}
-              onChange={(e) =>
-                setNewMessage({ ...newMessage, title: e.target.value })
-              }
+          <>
+            <AddNewMassage
+              newMessage={newMessage}
+              setNewMessage={setNewMessage}
+              handleSaveNewMessage={handleSaveNewMessage}
+              setShowAddForm={setShowAddForm}
+              refreshLessons={fetchMessages}
             />
-            <label>תוכן ההודעה:</label>
-            <textarea
-              value={newMessage.message}
-              onChange={(e) =>
-                setNewMessage({ ...newMessage, message: e.target.value })
-              }
-            />
-            <label>סוג:</label>
-            <select
-              value={newMessage.type}
-              onChange={(e) =>
-                setNewMessage({ ...newMessage, type: e.target.value })
-              }
-            >
-              <option value="כללי">כללי</option>
-              <option value="מנהלי">מנהלי</option>
-            </select>
-            <label>שולח:</label>
-            <input
-              value={newMessage.sender}
-              onChange={(e) =>
-                setNewMessage({ ...newMessage, sender: e.target.value })
-              }
-            />
-            <button onClick={handleSaveNewMessage}>שמור הודעה</button>
-            <button onClick={() => setShowAddForm(false)}>סגור</button>
-          </div>
+            <div style={{ height: "30px" }}></div>
+          </>
         )}
-
         <table className="table-container">
-          <thead>
+          <thead className="thead">
             <tr>
-              <th>#</th>
+              <th></th>
               <th>כותרת</th>
-              <th>הודעה</th>
+              <th>תוכן</th>
               <th>סוג</th>
-              <th>שולח</th>
+              <th>שם השולח</th>
+              <th>זמן שליחה </th>
               <th>ערוך</th>
               <th>מחק</th>
             </tr>
@@ -164,20 +155,28 @@ const MassagesManager = () => {
           <tbody>
             {messages.map((message, index) => (
               <tr key={message.id}>
-                <td>{index + 1}</td>
+                <td>
+                  <strong>{index + 1}</strong>
+                </td>
                 <td>{message.title}</td>
                 <td>{message.message}</td>
                 <td>{message.type}</td>
                 <td>{message.sender}</td>
+                <td>{formatDate(message)}</td>
                 <td>
-                  <button onClick={() => setEditMessage(message)}>ערוך</button>
+                  <button
+                    className="edit-button"
+                    onClick={() => setEditMessage(message)}
+                  >
+                    <MdOutlineModeEditOutline size={16} />
+                  </button>
                 </td>
                 <td>
                   <button
                     className="delete-button"
                     onClick={() => handleDeleteClick(message.id)}
                   >
-                    מחק
+                    <MdOutlineDeleteOutline size={16} />
                   </button>
                 </td>
               </tr>
@@ -186,43 +185,78 @@ const MassagesManager = () => {
         </table>
 
         {editMessage && (
-          <div className="edit-modal">
-            <h2>עריכת הודעה</h2>
-            <label>כותרת:</label>
-            <input
-              value={editMessage.title}
-              onChange={(e) =>
-                setEditMessage({ ...editMessage, title: e.target.value })
-              }
-            />
-            <label>תוכן ההודעה:</label>
-            <textarea
-              value={editMessage.message}
-              onChange={(e) =>
-                setEditMessage({ ...editMessage, message: e.target.value })
-              }
-            />
-            <label>סוג:</label>
-            <select
-              value={editMessage.type}
-              onChange={(e) =>
-                setEditMessage({ ...editMessage, type: e.target.value })
-              }
-            >
-              <option value="כללי">כללי</option>
-              <option value="מנהלי">מנהלי</option>
-            </select>
-            <label>שולח:</label>
-            <input
-              value={editMessage.sender}
-              onChange={(e) =>
-                setEditMessage({ ...editMessage, sender: e.target.value })
-              }
-            />
-            <button onClick={handleSaveChanges}>שמור שינויים</button>
-            <button onClick={() => setEditMessage(null)}>סגור</button>
-          </div>
+          <>
+            {editMessage && (
+              <>
+                <div className="overlay" onClick={() => setEditMessage(null)}>
+                </div>
+
+                <div className="edit-modal">
+                  <h2>עריכת הודעה</h2>
+                  <form className="form-grid">
+                    <div>
+                      <label>כותרת:</label>
+                      <input
+                        value={editMessage.title}
+                        onChange={(e) =>
+                          setEditMessage({
+                            ...editMessage,
+                            title: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label>תוכן ההודעה:</label>
+                      <textarea
+                        value={editMessage.message}
+                        onChange={(e) =>
+                          setEditMessage({
+                            ...editMessage,
+                            message: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label>סוג:</label>
+                      <select
+                        value={editMessage.type}
+                        onChange={(e) =>
+                          setEditMessage({
+                            ...editMessage,
+                            type: e.target.value,
+                          })
+                        }
+                      >
+                        <option value="כללי">כללי</option>
+                        <option value="מנהלי">מנהלי</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label>שם השולח:</label>
+                      <input
+                        value={editMessage.sender}
+                        onChange={(e) =>
+                          setEditMessage({
+                            ...editMessage,
+                            sender: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div className="form-actions">
+                      <button type="button" onClick={handleSaveChanges}>שמור שינויים</button>
+                      <button type="button" onClick={() => setEditMessage(null)}>סגור</button>
+                    </div>
+                  </form>
+                </div>
+              </>
+            )}
+          </>
         )}
+        <div style={{ height: "50px" }}></div>
+        <Footer className="footer" />
       </div>
     </div>
   );

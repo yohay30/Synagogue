@@ -1,9 +1,8 @@
-
 import React, { useState } from "react";
 import "../../assets/styles/styleManager/styleComponents_manager/addNewFriend.css";
 import { useForm } from "react-hook-form";
 
-const AddNewFriend = ({ setShowAddForm }) => {
+const AddNewFriend = ({ setShowAddForm, refreshFriends }) => {
   const { register, handleSubmit, reset } = useForm();
   const [loading, setLoading] = useState(false); // למקרה של טעינה
 
@@ -30,6 +29,7 @@ const AddNewFriend = ({ setShowAddForm }) => {
         alert("חבר חדש נוסף בהצלחה!");
         setShowAddForm(false); // סגירת הטופס
         reset(); // איפוס הטופס
+        refreshFriends(); // רענון הרשימה
       } else {
         const error = await response.json();
         alert(`שגיאה: ${error.error}`);
@@ -45,17 +45,19 @@ const AddNewFriend = ({ setShowAddForm }) => {
 
   return (
     <div>
-      <div className="add-friend-modal">
+      <div className="add-new-modal">
         <h2>הוספת חבר חדש</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="form-grid">
             <div>
               <label>שם פרטי:</label>
-              <input {...register("first_name", { required: true })} />
+              <input
+                {...register("first_name", { required: true, maxLength: 10 })}
+              />
             </div>
             <div>
               <label>שם משפחה:</label>
-              <input {...register("last_name", { required: true })} />
+              <input {...register("last_name", { required: true , maxLength: 10})} />
             </div>
             <div>
               <label>טלפון:</label>
@@ -79,7 +81,7 @@ const AddNewFriend = ({ setShowAddForm }) => {
             </div>
             <div>
               <label>כתובת:</label>
-              <input {...register("address")} />
+              <input {...register("address", )} />
             </div>
             <div>
               <label>סיסמה:</label>
@@ -92,8 +94,8 @@ const AddNewFriend = ({ setShowAddForm }) => {
               />
             </div>
             <div>
-              <label>מספר תעודת זהות:</label>
-              <input
+              <label>מספר זהות: </label>
+              <input  
                 {...register("id_number", {
                   required: true,
                   pattern: /^[0-9]{9}$/, // בדיקת פורמט של ת"ז

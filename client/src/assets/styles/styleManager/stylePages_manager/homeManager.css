@@ -9,3 +9,8 @@
     max-width: 1020px;
     margin:  auto;
 }
+input::placeholder {
+    font-style: italic; /* כתב נטוי */
+    color: gray; /* צבע אפור */
+    font-size: 14px; /* גודל טקסט */
+  }
