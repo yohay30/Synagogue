@@ -37,6 +37,7 @@ const AddNewMemorial = ({ setShowAddForm, refreshLessons }) => {
 
   return (
     <div className="add-new-modal">
+      <h2>הוספת אזכרה</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="form-grid">
           <div>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../../assets/styles/styleManager/styleComponents_manager/addNewEvent.css";
+// import "../../assets/styles/styleManager/styleComponents_manager/addNewEvent.css";
 import { useForm } from "react-hook-form";
 
 const AddNewEvent = ({ setShowAddForm, refreshEvents }) => {
@@ -36,6 +36,7 @@ const AddNewEvent = ({ setShowAddForm, refreshEvents }) => {
 
   return (
     <div className="add-new-modal">
+      <h2>הוספת אירוע חדש</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="form-grid">
           <div>

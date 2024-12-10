@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import NavbarManager from "../components_manager/navbarManager";
 import Footer from "../components_manager/footer";
 import AddNewMemorial from "../components_manager/addNewMemorial";
-import "../../assets/styles/styleManager/stylePages_manager/memorialsManager.css";
+// import "../../assets/styles/styleManager/stylePages_manager/memorialsManager.css";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import { MdOutlineModeEditOutline } from "react-icons/md";
 
@@ -145,8 +145,14 @@ const MemorialsManager = () => {
             />
           </div>
           <div className="btn-container">
-            <button className="add-button" onClick={handleAddClick}>
-              הוסף אזכרה חדשה
+            <button
+              className="add-button"
+              onClick={() => {
+                handleAddClick(); // קריאה לפונקציה שמוסיפה חבר חדש
+                window.scrollTo({ top: 0, behavior: "smooth" }); // גלילה לראש העמוד
+              }}
+            >
+              הוסף חבר חדש
             </button>
           </div>
         </div>

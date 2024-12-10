@@ -1,12 +1,13 @@
-// src/pages_manager/FriendsManager.js
-
 import React, { useEffect, useState } from "react";
 import AddNewFriend from "../components_manager/addNewFriend";
 import NavbarManager from "../components_manager/navbarManager";
 import Footer from "../components_manager/footer";
+import "../../assets/styles/styleManager/baseCssManager/tablesAndTitles.css";
+import "../../assets/styles/styleManager/baseCssManager/buttonsAndInputs.css";
+import "../../assets/styles/styleManager/baseCssManager/baseAndDivs.css";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import { MdOutlineModeEditOutline } from "react-icons/md";
-import "../../assets/styles/styleManager/stylePages_manager/friendsManager.css";
+// import "../../assets/styles/styleManager/stylePages_manager/friendsManager.css";
 
 const FriendsManager = () => {
   const [members, setMembers] = useState([]);
@@ -156,8 +157,15 @@ const FriendsManager = () => {
               onChange={handleSearch}
             />
           </div>
+
           <div className="btn-container">
-            <button className="add-button" onClick={handleAddClick}>
+            <button
+              className="add-button"
+              onClick={() => {
+                handleAddClick(); // קריאה לפונקציה שמוסיפה חבר חדש
+                window.scrollTo({ top: 0, behavior: "smooth" }); // גלילה לראש העמוד
+              }}
+            >
               הוסף חבר חדש
             </button>
           </div>
@@ -173,60 +181,64 @@ const FriendsManager = () => {
         )}
 
         <table className="table-container">
-          <thead className="thead">
-            <tr>
-              <th></th>
-              <th rowSpan="2">שם פרטי</th>
-              <th>שם משפחה</th>
-              <th>טלפון</th>
-              <th>אימייל</th>
-              <th>כתובת</th>
-              <th>כיסא מספר</th>
-              <th>מנהל</th>
-              <th>ערוך</th>
-              <th>מחק</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredMembers.map((member, index) => (
-              <tr key={member.id}>
-                <td>
-                  <strong>{index + 1}</strong>
-                </td>
-                <td>{member.first_name}</td>
-                <td>{member.last_name}</td>
-                <td>{member.phone}</td>
-                <td>{member.email}</td>
-                <td>{member.address}</td>
-                <td>{member.chair_number}</td>
-                <td>{member.is_admin === 1 ? "כן" : "לא"}</td>
-                <td>
-                  <button
-                    className="edit-button"
-                    onClick={() => handleEditClick(member)}
-                  >
-                    <MdOutlineModeEditOutline size={16} />
-                  </button>
-                </td>
-                <td>
-                  <button
-                    className="delete-button"
-                    onClick={() => handleDeleteClick(member.id)}
-                  >
-                    <MdOutlineDeleteOutline size={16} />
-                  </button>
-                </td>
+          <div class="table-wrapper">
+            <thead className="thead">
+              <tr>
+                <th></th>
+                <th rowSpan="2">שם פרטי</th>
+                <th>שם משפחה</th>
+                <th>טלפון</th>
+                <th>אימייל</th>
+                <th>כתובת</th>
+                <th>כיסא מספר</th>
+                <th>מנהל</th>
+                <th>ערוך</th>
+                <th>מחק</th>
               </tr>
-            ))}
-          </tbody>
+            </thead>
+            <tbody>
+              {filteredMembers.map((member, index) => (
+                <tr key={member.id}>
+                  <td>
+                    <strong>{index + 1}</strong>
+                  </td>
+                  <td>{member.first_name}</td>
+                  <td>{member.last_name}</td>
+                  <td>{member.phone}</td>
+                  <td>{member.email}</td>
+                  <td>{member.address}</td>
+                  <td>{member.chair_number}</td>
+                  <td>{member.is_admin === 1 ? "כן" : "לא"}</td>
+                  <td>
+                    <button
+                      className="edit-button"
+                      onClick={() => handleEditClick(member)}
+                    >
+                      <MdOutlineModeEditOutline size={16} />
+                    </button>
+                  </td>
+                  <td>
+                    <button
+                      className="delete-button"
+                      onClick={() => handleDeleteClick(member.id)}
+                    >
+                      <MdOutlineDeleteOutline size={16} />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </div>
         </table>
 
         {editMember && (
           <>
             {editMember && (
               <>
-                <div className="overlay" onClick={() => setEditMember(null)}>
-                </div>
+                <div
+                  className="overlay"
+                  onClick={() => setEditMember(null)}
+                ></div>
                 <div className="edit-modal">
                   <h2>עריכת חבר</h2>
                   <form className="form-grid">

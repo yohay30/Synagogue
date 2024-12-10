@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../../assets/styles/styleManager/styleComponents_manager/addNewLesson.css";
+// import "../../assets/styles/styleManager/styleComponents_manager/addNewLesson.css";
 import { useForm } from "react-hook-form";
 
 const AddNewLesson = ({ setShowAddForm, refreshLessons }) => {
@@ -37,6 +37,7 @@ const AddNewLesson = ({ setShowAddForm, refreshLessons }) => {
 
   return (
     <div className="add-new-modal">
+      <h2>הוספת שיעור חדש</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="form-grid">
           <div>

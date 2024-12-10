@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../../assets/styles/styleManager/styleComponents_manager/addNewMassage.css";
+// import "../../assets/styles/styleManager/styleComponents_manager/addNewMassage.css";
 import { useForm } from "react-hook-form";
 
 const AddNewMessage = ({ setShowAddForm, refreshMessages }) => {
@@ -37,6 +37,7 @@ const AddNewMessage = ({ setShowAddForm, refreshMessages }) => {
 
   return (
     <div className="add-new-modal">
+      <h2>הוספת הודעה חדשה</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="form-grid">
           <div>

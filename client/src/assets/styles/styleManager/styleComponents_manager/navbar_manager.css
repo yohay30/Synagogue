@@ -30,9 +30,15 @@
     margin: 0 18px;
     transition: color 0.3s ease;
 }
+.navbar_manager:hover {
+    color: #007aff; /* צבע כחול Apple במעבר */
+    opacity: 1;
+  background-color: #ffffff;
+}
 
 .navbar_manager a:hover {
     color: #007aff; /* צבע כחול Apple במעבר */
+    
 }
 
 .navbar_manager a:last-child {

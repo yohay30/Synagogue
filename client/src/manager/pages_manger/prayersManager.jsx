@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import NavbarManager from "../components_manager/navbarManager";
-import AddNewPrayer from "../components_manager/addNewPrayer"
-import "../../assets/styles/styleManager/stylePages_manager/prayersManager.css";
+import AddNewPrayer from "../components_manager/addNewPrayer";
+import "../../assets/styles/styleManager/baseCssManager/tablesAndTitles.css";
+import "../../assets/styles/styleManager/baseCssManager/buttonsAndInputs.css";
+import "../../assets/styles/styleManager/baseCssManager/baseAndDivs.css";
+// import "../../assets/styles/styleManager/stylePages_manager/prayersManager.css";
 import Footer from "../components_manager/footer";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import { MdOutlineModeEditOutline } from "react-icons/md";
@@ -19,6 +22,7 @@ const PrayersManager = () => {
     try {
       const response = await fetch("http://localhost:5000/prayers-manager");
       const data = await response.json();
+      if (!response.ok) throw new Error("Failed to fetch prayers");
       setPrayers(data);
     } catch (error) {
       console.error("Error fetching prayers:", error);
@@ -98,7 +102,7 @@ const PrayersManager = () => {
                       className="edit-button"
                       onClick={() => handleEditClick(prayer)}
                     >
-                      <MdOutlineModeEditOutline size={16} />
+                      <MdOutlineModeEditOutline className="edit-icon" />
                     </button>
                   </td>
                   <td>
@@ -106,7 +110,7 @@ const PrayersManager = () => {
                       className="delete-button"
                       onClick={() => handleDeleteClick(prayer.id)}
                     >
-                      <MdOutlineDeleteOutline size={16} />
+                      <MdOutlineDeleteOutline  className="delete-icon" />
                     </button>
                   </td>
                 </tr>
@@ -130,11 +134,16 @@ const PrayersManager = () => {
           <strong>
             <h1>תפילות</h1>
           </strong>
-          <button className="add-button" onClick={() => setShowAddForm(true)}>
+        <button className="add-button" onClick={() =>{
+            setShowAddForm(true);
+            window.scrollTo({ top: 0, behavior: "smooth" });
+            }}>
             הוסף תפילה
           </button>
         </div>
         <div>
+          <div style={{ height: "20px" }}></div>
+
           {showAddForm && (
             <>
               <div style={{ height: "30px" }}></div>

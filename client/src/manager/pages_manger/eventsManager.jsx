@@ -2,9 +2,12 @@ import React, { useEffect, useState } from "react";
 import NavbarManager from "../components_manager/navbarManager";
 import AddNewEvent from "../components_manager/addNewEvent.jsx"; // קומפוננטה חדשה שתהיה דומה ל-AddNewMassage
 import Footer from "../components_manager/footer";
+import "../../assets/styles/styleManager/baseCssManager/tablesAndTitles.css";
+import "../../assets/styles/styleManager/baseCssManager/buttonsAndInputs.css";
+import "../../assets/styles/styleManager/baseCssManager/baseAndDivs.css";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import { MdOutlineModeEditOutline } from "react-icons/md";
-import "../../assets/styles/styleManager/stylePages_manager/eventsManager.css";
+// import "../../assets/styles/styleManager/stylePages_manager/eventsManager.css";
 
 const EventsManager = () => {
   const [events, setEvents] = useState([]);

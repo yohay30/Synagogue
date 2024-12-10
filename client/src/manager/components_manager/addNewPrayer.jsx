@@ -1,6 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import "../../assets/styles/styleManager/styleComponents_manager/addNewPrayer.css";
+// import "../../assets/styles/styleManager/styleComponents_manager/addNewPrayer.css";
+import "../../assets/styles/styleManager/styleComponents_manager/addNewMain.css";
 const AddNewPrayer = ({ setShowAddForm, refreshPrayers }) => {
   const { register, handleSubmit, reset } = useForm();
 

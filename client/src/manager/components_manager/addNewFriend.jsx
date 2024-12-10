@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../../assets/styles/styleManager/styleComponents_manager/addNewFriend.css";
+// import "../../assets/styles/styleManager/styleComponents_manager/addNewFriend.css";
 import { useForm } from "react-hook-form";
 
 const AddNewFriend = ({ setShowAddForm, refreshFriends }) => {
